@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mahesh OS — Personal Operating System
+
+A premium, futuristic "second brain" dashboard to run every area of life from one place —
+health, projects, career, jobs, learning, finances, goals and habits. Minimal, glassmorphic,
+dark-first, fast, with smooth motion and micro-interactions.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js 16** (App Router) · **React 19** · **TypeScript**
+- **Tailwind CSS v4** — design tokens in `app/globals.css`
+- **Framer Motion** — page transitions, blob background, hover/press micro-interactions
+- **Zustand** (+ persist) — all app state, saved to `localStorage`
+- **Recharts** — charts · **cmdk** — ⌘K command palette · **lucide-react** — icons
+- **next-themes** — dark/light · **sonner** — toasts
 
-## Learn More
+## What's in v1
 
-To learn more about Next.js, take a look at the following resources:
+Fully interactive, data persisted locally:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Dashboard** — greeting, live clock, weather, quote, progress ring, health stats,
+  tasks, schedule, deadlines, activity, quick notes, AI morning brief
+- **Habits** — daily toggles, streaks, GitHub-style heatmap, weekly chart
+- **Gym** — body-weight/fat/BMI, strength log, PRs, workout timer, charts
+- **Diet** — macro rings, macro-distribution donut, meal planner, water, supplements
+- **Projects** — status/priority cards + detail drawer with milestone tracking
+- **Finances** — net worth, spending breakdown, savings goals, subscriptions, transactions
+- **Jobs / Journal / Analytics / My Life / AI Assistant / Settings** — interactive
+- **Career / Freelancing / Learning / Goals / Calendar / Resources** — rich, styled views
+- Global **⌘K command palette** (search + quick actions), floating nav, mobile bottom nav,
+  gamified XP/level/streak, dark & light themes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architecture
 
-## Deploy on Vercel
+```
+app/(dashboard)/        # route group: shell layout + every page
+components/
+  layout/               # sidebar, topbar, command palette, animated background, mobile nav
+  ui/                   # GlassCard, StatCard, ProgressRing, Button, Badge, etc.
+  dashboard/            # home widgets
+  charts/               # Recharts wrappers
+lib/
+  store.ts              # Zustand store (persisted)
+  data/seed.ts          # realistic demo dataset
+  utils.ts, hooks.ts, nav.ts, types.ts, icon-map.ts
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## v2 roadmap (not built yet)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Real auth (Google/GitHub), Postgres + Prisma persistence, live AI assistant, cloud file
+uploads, live integrations (weather/GitHub/LeetCode/Spotify), FullCalendar, PWA/offline,
+deployment. The architecture is modular so each can be added without rework.
+
+> Data is demo/seed data stored locally in your browser. Reset it any time from **Settings → Data**.

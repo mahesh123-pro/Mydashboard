@@ -1,26 +1,344 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Class-based dark mode (next-themes adds .dark / .light on <html>) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============================================================
+   Design tokens
+   Dark is primary (also the :root fallback to avoid flash).
+   ============================================================ */
+:root,
+.dark {
+  --background: #08080c;
+  --background-2: #0b0b11;
+  --foreground: #f7f7fa;
+
+  --card: rgba(21, 21, 26, 0.64);
+  --card-solid: #16161b;
+  --card-hover: rgba(28, 28, 34, 0.78);
+  --elevated: rgba(24, 24, 30, 0.9);
+
+  --muted: #9b9ba6;
+  --muted-2: #6b6b78;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-strong: rgba(255, 255, 255, 0.12);
+  --glass-highlight: rgba(255, 255, 255, 0.07);
+
+  --shadow-color: 245deg 40% 3%;
+  --ring: rgba(16, 185, 129, 0.5);
+}
+
+.light {
+  --background: #f4f4f5;
+  --background-2: #ededf0;
+  --foreground: #0a0a0b;
+
+  --card: rgba(255, 255, 255, 0.7);
+  --card-solid: #ffffff;
+  --card-hover: rgba(255, 255, 255, 0.9);
+  --elevated: rgba(255, 255, 255, 0.92);
+
+  --muted: #52525b;
+  --muted-2: #71717a;
+  --border: rgba(9, 9, 11, 0.08);
+  --border-strong: rgba(9, 9, 11, 0.14);
+  --glass-highlight: rgba(255, 255, 255, 0.6);
+
+  --shadow-color: 240deg 6% 60%;
+  --ring: rgba(16, 185, 129, 0.5);
 }
 
 @theme inline {
+  /* Semantic (theme-reactive) */
   --color-background: var(--background);
+  --color-background-2: var(--background-2);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-solid: var(--card-solid);
+  --color-elevated: var(--elevated);
+  --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  /* Brand (fixed across themes) — Emerald & Jade */
+  --color-primary: #10b981;
+  --color-primary-50: #ecfdf5;
+  --color-primary-fg: #ffffff;
+  --color-secondary: #059669;
+  --color-accent: #14b8a6;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-display), ui-serif, Georgia, serif;
+
+  --radius-4xl: 2rem;
+
+  /* Animations */
+  --animate-blob: blob 22s ease-in-out infinite;
+  --animate-aurora: aurora 18s ease infinite;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(6%, -8%) scale(1.12);
+  }
+  66% {
+    transform: translate(-6%, 6%) scale(0.92);
   }
 }
 
+@keyframes aurora {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.6;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 24px 2px rgba(16, 185, 129, 0.35);
+  }
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+* {
+  border-color: var(--border);
+}
+
+html {
+  color-scheme: dark;
+}
+html.light {
+  color-scheme: light;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(16, 185, 129, 0.32);
+  color: #fff;
+}
+
+/* Keyboard focus visibility (mouse clicks stay ring-free) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Numeric alignment for stats */
+.tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ── Editorial typography ──────────────────────────────────────────────
+   Fraunces serif for large display headings only (the type signature). */
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+}
+
+/* Small structural label — used above section/page titles. */
+.eyebrow {
+  font-size: 0.6875rem;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+/* ============================================================
+   Glassmorphism
+   ============================================================ */
+.glass {
+  background: var(--card);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 1px 0 0 var(--glass-highlight) inset,
+    0 2px 6px -2px hsl(var(--shadow-color) / 0.4),
+    0 12px 28px -14px hsl(var(--shadow-color) / 0.55);
+}
+
+.glass-strong {
+  background: var(--elevated);
+  backdrop-filter: blur(28px) saturate(170%);
+  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  border: 1px solid var(--border-strong);
+  box-shadow:
+    0 1px 0 0 var(--glass-highlight) inset,
+    0 4px 12px -4px hsl(var(--shadow-color) / 0.5),
+    0 24px 60px -20px hsl(var(--shadow-color) / 0.7);
+}
+
+.card-hover {
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.4s ease;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  box-shadow:
+    0 1px 0 0 var(--glass-highlight) inset,
+    0 6px 16px -6px hsl(var(--shadow-color) / 0.5),
+    0 28px 64px -22px hsl(var(--shadow-color) / 0.75);
+}
+
+/* ============================================================
+   Gradients / decorative
+   ============================================================ */
+.text-gradient {
+  background: linear-gradient(115deg, #ffffff 20%, #a7f3d0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.light .text-gradient {
+  background: linear-gradient(115deg, #18181b 20%, #059669 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-gradient {
+  background: linear-gradient(120deg, #10b981, #059669);
+}
+
+/* Signature name treatment — restrained emerald→jade, no rainbow cycle. */
+.aurora-text {
+  background: linear-gradient(110deg, #6ee7b7 0%, #10b981 55%, #059669 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.light .aurora-text {
+  background: linear-gradient(110deg, #10b981 0%, #047857 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grid-overlay {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+.ring-glow {
+  box-shadow: 0 0 0 1px var(--ring), 0 0 22px -2px var(--ring);
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    var(--glass-highlight) 37%,
+    var(--border) 63%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: 0.75rem;
+}
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-2);
+  background-clip: content-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
