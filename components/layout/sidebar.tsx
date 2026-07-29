@@ -85,11 +85,10 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* footer */}
         <div className="mt-2 space-y-2">
           {collapsed ? (
             <div className="flex justify-center">
-              <Avatar name={name} color={color} size={36} />
+              <Avatar name={name} url={useStore((s) => s.profile.avatarUrl)} color={color} size={36} />
             </div>
           ) : (
             <ProfileChip />

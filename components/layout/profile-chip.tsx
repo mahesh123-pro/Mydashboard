@@ -11,7 +11,7 @@ export function ProfileChip({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
       <div className="flex items-center gap-2.5 rounded-xl border border-border bg-white/[0.03] py-1.5 pl-1.5 pr-3">
-        <Avatar name={profile.name} color={profile.avatarColor} size={30} />
+        <Avatar name={profile.name} url={profile.avatarUrl} color={profile.avatarColor} size={30} />
         <div className="leading-tight">
           <div className="text-xs font-semibold">{profile.name}</div>
           <div className="text-[10px] text-muted-2">Lvl {level}</div>
@@ -23,7 +23,7 @@ export function ProfileChip({ compact = false }: { compact?: boolean }) {
   return (
     <div className="rounded-2xl border border-border bg-white/[0.03] p-3">
       <div className="flex items-center gap-3">
-        <Avatar name={profile.name} color={profile.avatarColor} size={40} />
+        <Avatar name={profile.name} url={profile.avatarUrl} color={profile.avatarColor} size={40} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between">
             <span className="truncate text-sm font-semibold">{profile.name}</span>
@@ -53,15 +53,31 @@ export function ProfileChip({ compact = false }: { compact?: boolean }) {
 
 export function Avatar({
   name,
+  url,
   color = "#10b981",
   size = 40,
   className,
 }: {
   name: string;
+  url?: string;
   color?: string;
   size?: number;
   className?: string;
 }) {
+  if (url) {
+    return (
+      <img
+        src={url}
+        alt={name}
+        className={cn("shrink-0 rounded-full object-cover shadow-sm", className)}
+        style={{
+          width: size,
+          height: size,
+        }}
+      />
+    );
+  }
+
   return (
     <div
       className={cn("grid shrink-0 place-items-center rounded-full font-semibold text-white", className)}
