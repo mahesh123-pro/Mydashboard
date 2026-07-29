@@ -193,7 +193,6 @@ export default function SettingsPage() {
   const setHealthGoals = useStore((s) => s.setHealthGoals);
   const resetAll = useStore((s) => s.resetAll);
   const fileRef = useRef<HTMLInputElement>(null);
-  const [newGoal, setNewGoal] = useState("");
 
   const exportData = () => {
     const raw = localStorage.getItem(STORE_KEY);
@@ -222,20 +221,6 @@ export default function SettingsPage() {
       }
     };
     reader.readAsText(file);
-  };
-
-  const addGoal = () => {
-    const g = newGoal.trim();
-    if (!g) return;
-    if (profile.goals.includes(g)) return toast.error("Goal already exists");
-    setProfile({ goals: [...profile.goals, g] });
-    setNewGoal("");
-    toast.success("Goal added");
-  };
-
-  const removeGoal = (goal: string) => {
-    setProfile({ goals: profile.goals.filter((g) => g !== goal) });
-    toast.success("Goal removed");
   };
 
   if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
@@ -351,69 +336,6 @@ export default function SettingsPage() {
           </div>
         </GlassCard>
 
-        {/* ── Profile ───────────────────────────────────── */}
-        <GlassCard className="p-6">
-          <SectionLabel icon={User} label="Profile" color="#10b981" />
-          <div className="mt-4 flex items-center gap-4">
-            <Avatar name={profile.name} color={profile.avatarColor} size={56} />
-            <div className="flex-1 space-y-2">
-              <input
-                value={profile.name}
-                onChange={(e) => setProfile({ name: e.target.value })}
-                placeholder="Your name"
-                className="h-10 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm outline-none focus:border-primary/50"
-              />
-            </div>
-          </div>
-          <textarea
-            value={profile.bio}
-            onChange={(e) => setProfile({ bio: e.target.value })}
-            rows={2}
-            placeholder="A short bio..."
-            className="mt-3 w-full resize-none rounded-xl border border-border bg-white/[0.03] p-3 text-sm outline-none focus:border-primary/50"
-          />
-          <input
-            value={profile.role}
-            onChange={(e) => setProfile({ role: e.target.value })}
-            placeholder="Your role (e.g., Software Engineer)"
-            className="mt-2 h-10 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm text-muted outline-none focus:border-primary/50"
-          />
-          <div className="mt-3">
-            <div className="mb-2 text-xs text-muted-2">Goals</div>
-            <div className="flex flex-wrap gap-1.5">
-              {profile.goals.map((g) => (
-                <span
-                  key={g}
-                  className="group inline-flex items-center gap-1 rounded-lg border border-border bg-white/[0.03] px-2 py-1 text-[11px] text-muted"
-                >
-                  {g}
-                  <button
-                    onClick={() => removeGoal(g)}
-                    className="ml-0.5 rounded-full p-0.5 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-danger/20 hover:text-danger cursor-pointer"
-                  >
-                    <X className="size-2.5" />
-                  </button>
-                </span>
-              ))}
-            </div>
-            <div className="mt-2 flex gap-2">
-              <input
-                value={newGoal}
-                onChange={(e) => setNewGoal(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addGoal()}
-                placeholder="Add a goal..."
-                className="h-8 flex-1 rounded-lg border border-border bg-white/[0.03] px-3 text-xs outline-none focus:border-primary/50"
-              />
-              <button
-                onClick={addGoal}
-                disabled={!newGoal.trim()}
-                className="rounded-lg bg-primary/20 px-3 text-xs font-medium text-primary transition-colors hover:bg-primary/30 disabled:opacity-40 cursor-pointer"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        </GlassCard>
 
         {/* ── Notifications & Sound ─────────────────────── */}
         <GlassCard className="p-6">

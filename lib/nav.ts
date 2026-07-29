@@ -17,6 +17,7 @@ import {
   Library,
   Sparkles,
   Settings,
+  User,
   type LucideIcon,
 } from "lucide-react";
 
@@ -49,6 +50,7 @@ export const NAV: NavItem[] = [
   { label: "Analytics", href: "/analytics", icon: LineChart, group: "System" },
   { label: "Resources", href: "/resources", icon: Library, group: "System" },
   { label: "AI Assistant", href: "/assistant", icon: Sparkles, group: "System" },
+  { label: "Profile", href: "/profile", icon: User, group: "System" },
   { label: "Settings", href: "/settings", icon: Settings, group: "System" },
 ];
 

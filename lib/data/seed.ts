@@ -39,10 +39,20 @@ export const seedProfile = {
   name: "Mahesh",
   bio: "Full-stack dev · founder-in-progress · building in public.",
   role: "Software Engineer & Founder",
+  location: "Earth",
   xp: 6480,
   streak: 24,
   goals: ["Ship 3 products", "AWS certified", "₹1L/mo freelance", "12% body fat"],
+  skills: ["React", "Next.js", "TypeScript", "Node.js", "Tailwind CSS"],
+  socials: {
+    github: "",
+    twitter: "",
+    linkedin: "",
+    website: "",
+  },
   avatarColor: "#10b981",
+  avatarUrl: "",
+  coverUrl: "",
 };
 
 /* ------------------------------- habits -------------------------------- */
