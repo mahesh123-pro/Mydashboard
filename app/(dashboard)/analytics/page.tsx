@@ -1,7 +1,7 @@
 "use client";
 
 import { LineChart, Gauge, Clock, Flame, CheckCircle2, TrendingUp } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { dayKey } from "@/lib/utils";
 import { PageHeader } from "@/components/ui/page-header";
@@ -11,10 +11,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AreaTrend, BarTrend, RadialGauge } from "@/components/charts/charts";
 
 export default function AnalyticsPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const s = useStore();
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const ids = s.habits.map((h) => h.id);
   const trend = Array.from({ length: 21 }).map((_, i) => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarDays, Users, CalendarClock, Cake, Target } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { PageHeader } from "@/components/ui/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 const WD = ["S", "M", "T", "W", "T", "F", "S"];
 
 export default function CalendarPage() {
-  const hydrated = useHydrated();
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  const ready = usePageReady();
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const now = new Date();
   const year = now.getFullYear();

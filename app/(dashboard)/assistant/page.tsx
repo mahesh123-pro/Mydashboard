@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Send, CalendarRange, Dumbbell, Salad, BarChart3, Lightbulb } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore, todayHealth, habitCompletion } from "@/lib/store";
 import type { AssistantContext } from "@/lib/assistant";
 import { PageHeader } from "@/components/ui/page-header";
@@ -22,7 +22,7 @@ const PROMPTS = [
 ];
 
 export default function AssistantPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const s = useStore();
   const [messages, setMessages] = useState<Msg[]>([
     { role: "ai", text: `Good to see you, ${s.profile.name}. I'm your OS assistant — ask me to plan your week, review your training, or analyze your productivity. What's on your mind?` },
@@ -36,7 +36,7 @@ export default function AssistantPage() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, thinking]);
 
-  if (!hydrated) return <Skeleton className="h-[70vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[70vh] rounded-3xl" />;
 
   const buildContext = (): AssistantContext => {
     const { done, total } = habitCompletion(s);

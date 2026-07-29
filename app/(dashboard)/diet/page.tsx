@@ -2,7 +2,7 @@
 
 import { Salad, Flame, Egg, Wheat, Droplet, Plus, Minus, Pill } from "lucide-react";
 import { toast } from "sonner";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore, todayHealth } from "@/lib/store";
 import { clamp, cn } from "@/lib/utils";
 import { PageHeader } from "@/components/ui/page-header";
@@ -16,14 +16,14 @@ import { dayKey } from "@/lib/utils";
 const GOALS = { calories: 2600, protein: 160, carbs: 300, fat: 80, water: 8 };
 
 export default function DietPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const s = useStore();
   const meals = useStore((x) => x.meals);
   const addWater = useStore((x) => x.addWater);
   const supplements = useStore((x) => x.supplements);
   const toggleSupplement = useStore((x) => x.toggleSupplement);
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const all = Object.values(meals).flat();
   const kcal = all.reduce((a, m) => a + m.kcal, 0);

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Briefcase, Send, CalendarCheck, Trophy, MapPin, Wifi, Building2 } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { PageHeader } from "@/components/ui/page-header";
 import { StatCard } from "@/components/ui/stat-card";
@@ -11,11 +11,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { JobBadge } from "@/components/ui/badge";
 
 export default function JobsPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const jobs = useStore((s) => s.jobs);
   const cycleJob = useStore((s) => s.cycleJob);
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const applied = jobs.filter((j) => j.status !== "saved").length;
   const interviews = jobs.filter((j) => j.status === "interview").length;

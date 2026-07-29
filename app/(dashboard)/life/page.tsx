@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { HeartPulse, Check, Users, CalendarClock, Target, Coffee } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { PageHeader } from "@/components/ui/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -30,13 +30,13 @@ const KIND_META: Record<string, { color: string; icon: typeof Users }> = {
 };
 
 export default function LifePage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const tasks = useStore((s) => s.tasks);
   const meetings = useStore((s) => s.meetings);
   const toggleTask = useStore((s) => s.toggleTask);
   const [view, setView] = useState<"timeline" | "kanban">("timeline");
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const events: Ev[] = [
     ...tasks.filter((t) => t.time).map((t) => ({ id: t.id, time: t.time!, title: t.title, kind: "task" as const, done: t.done, priority: t.priority })),

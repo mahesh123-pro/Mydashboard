@@ -2,7 +2,7 @@
 
 import { Reorder, useDragControls } from "framer-motion";
 import { ListChecks, Flame, CheckCircle2, Trophy, Percent, Check, GripVertical } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { dayKey, cn } from "@/lib/utils";
 import { getIcon } from "@/lib/icon-map";
@@ -28,13 +28,13 @@ function streakOf(log: Record<string, boolean> | undefined, days = 400) {
 }
 
 export default function HabitsPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const habits = useStore((s) => s.habits);
   const habitLog = useStore((s) => s.habitLog);
   const toggleHabit = useStore((s) => s.toggleHabit);
   const reorderHabits = useStore((s) => s.reorderHabits);
 
-  if (!hydrated) {
+  if (!ready) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-16 w-64 rounded-2xl" />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { Stagger, Reveal } from "@/components/ui/reveal";
 import { CardSkeleton, Skeleton } from "@/components/ui/skeleton";
 import { Greeting } from "@/components/dashboard/greeting";
@@ -14,8 +14,8 @@ import { QuickNotes } from "@/components/dashboard/quick-notes";
 import { AIInsights } from "@/components/dashboard/ai-insights";
 
 export default function DashboardPage() {
-  const hydrated = useHydrated();
-  if (!hydrated) return <DashboardSkeleton />;
+  const ready = usePageReady();
+  if (!ready) return <DashboardSkeleton />;
 
   return (
     <Stagger className="space-y-4">

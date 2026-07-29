@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useStore } from "@/lib/store";
 
 /** Ticking clock. Returns a live Date, updated every `intervalMs`. */
 export function useNow(intervalMs = 1000) {
@@ -18,6 +19,13 @@ export function useHydrated() {
   const [hydrated, setHydrated] = useState(false);
   useEffect(() => setHydrated(true), []);
   return hydrated;
+}
+
+/** Returns true once mounted on the client AND the store is fully loaded. */
+export function usePageReady() {
+  const hydrated = useHydrated();
+  const isLoading = useStore((s) => s.isLoading);
+  return hydrated && !isLoading;
 }
 
 /** Matches a media query, SSR-safe. */

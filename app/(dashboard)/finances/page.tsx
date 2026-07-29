@@ -2,7 +2,7 @@
 
 import { Wallet, TrendingUp, ArrowDownRight, ArrowUpRight, PiggyBank, Plus, Receipt, CreditCard } from "lucide-react";
 import { toast } from "sonner";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { formatCurrency, cn } from "@/lib/utils";
 import { buildNetWorth, spendingByCategory } from "@/lib/data/seed";
@@ -13,14 +13,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AreaTrend, Donut } from "@/components/charts/charts";
 
 export default function FinancesPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const finance = useStore((s) => s.finance);
   const subscriptions = useStore((s) => s.subscriptions);
   const savingsGoals = useStore((s) => s.savingsGoals);
   const transactions = useStore((s) => s.transactions);
   const addToSavings = useStore((s) => s.addToSavings);
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const savingsRate = Math.round(((finance.monthlyIncome - finance.monthlyExpenses) / finance.monthlyIncome) * 100);
   const netWorth = buildNetWorth().map((p) => ({ date: p.date, value: p.value }));

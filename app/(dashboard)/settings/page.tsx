@@ -32,7 +32,7 @@ import {
   Sparkles,
   ChevronDown,
 } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { SHORTCUT_GROUPS } from "@/lib/shortcuts";
 import { PageHeader } from "@/components/ui/page-header";
@@ -183,7 +183,7 @@ function NumberStepper({ value, onChange, min = 0, max = 999, step = 1, unit }: 
 }
 
 export default function SettingsPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const { theme, setTheme } = useTheme();
   const profile = useStore((s) => s.profile);
   const setProfile = useStore((s) => s.setProfile);
@@ -238,7 +238,7 @@ export default function SettingsPage() {
     toast.success("Goal removed");
   };
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
   const isDark = theme !== "light";
 
   return (

@@ -62,58 +62,56 @@ async function main() {
 
   const db = client.db();
 
-  const collections = [
-    { name: "profile", data: seedProfile, type: "object" },
-    { name: "habits", data: seedHabits, type: "array" },
-    { name: "habit_logs", data: { _id: "habit_logs", log: buildHabitLog() }, type: "object" },
-    { name: "health_goals", data: { _id: "health_goals", ...healthGoals }, type: "object" },
-    { name: "health_logs", data: { _id: "health_logs", log: buildHealthLog() }, type: "object" },
-    { name: "meals", data: { _id: "meals", ...seedMeals }, type: "object" },
-    { name: "supplements", data: seedSupplements, type: "array" },
-    { name: "body", data: buildBody(), type: "array" },
-    { name: "workouts", data: buildWorkouts(), type: "array" },
-    { name: "prs", data: seedPRs, type: "array" },
-    { name: "projects", data: seedProjects, type: "array" },
-    { name: "finance", data: { _id: "finance", ...financeSummary }, type: "object" },
-    { name: "subscriptions", data: seedSubscriptions, type: "array" },
-    { name: "savings_goals", data: seedSavingsGoals, type: "array" },
-    { name: "transactions", data: seedTransactions, type: "array" },
-    { name: "tasks", data: seedTasks, type: "array" },
-    { name: "meetings", data: seedMeetings, type: "array" },
-    { name: "activity", data: seedActivity, type: "array" },
-    { name: "journal", data: seedJournal, type: "array" },
-    { name: "jobs", data: seedJobs, type: "array" },
-    { name: "notes", data: { _id: "notes", list: seedNotes }, type: "object" },
-    { name: "settings", data: { _id: "settings", ...defaultSettings }, type: "object" }
+  // 1. Drop old individual collections to keep database clean
+  const oldCollections = [
+    "profile", "habits", "habit_logs", "health_goals", "health_logs", "meals", 
+    "supplements", "body", "workouts", "prs", "projects", "finance", 
+    "subscriptions", "savings_goals", "transactions", "tasks", "meetings", 
+    "activity", "journal", "jobs", "notes", "settings"
   ];
-
-  for (const col of collections) {
-    console.log(`Seeding collection: ${col.name}...`);
-    const collection = db.collection(col.name);
-    
-    // Clear existing data
-    await collection.deleteMany({});
-    
-    if (col.type === "array") {
-      const arr = col.data as any[];
-      if (arr.length > 0) {
-        // Map _id from id if present to make standard MongoDB documents
-        const docs = arr.map(item => {
-          if (item.id && !item._id) {
-            return { _id: item.id, ...item };
-          }
-          return item;
-        });
-        await collection.insertMany(docs);
-      }
-    } else {
-      const obj = col.data as any;
-      if (col.name === "profile" && !obj._id) {
-        obj._id = "profile";
-      }
-      await collection.insertOne(obj);
+  console.log("Cleaning up old individual collections...");
+  for (const name of oldCollections) {
+    try {
+      await db.collection(name).drop();
+    } catch {
+      // Ignore if collection doesn't exist or is already dropped
     }
   }
+
+  // 2. Prepare consolidated dashboard document
+  const dashboardData = {
+    _id: "dashboard",
+    profile: seedProfile,
+    tasks: seedTasks,
+    meetings: seedMeetings,
+    activity: seedActivity,
+    notes: seedNotes,
+    habits: seedHabits,
+    habitLog: buildHabitLog(),
+    healthLog: buildHealthLog(),
+    healthGoals: healthGoals,
+    meals: seedMeals,
+    supplements: seedSupplements,
+    body: buildBody(),
+    workouts: buildWorkouts(),
+    prs: seedPRs,
+    projects: seedProjects,
+    finance: financeSummary,
+    subscriptions: seedSubscriptions,
+    savingsGoals: seedSavingsGoals,
+    transactions: seedTransactions,
+    journal: seedJournal,
+    jobs: seedJobs,
+    settings: defaultSettings
+  };
+
+  // 3. Seed consolidated dashboard document
+  console.log("Seeding consolidated dashboard document...");
+  await db.collection<any>("dashboard").replaceOne(
+    { _id: "dashboard" },
+    dashboardData,
+    { upsert: true }
+  );
 
   console.log("Database seeded successfully!");
   await client.close();

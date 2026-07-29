@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { FolderKanban, GitBranch, ExternalLink, Clock, Rocket, Layers, Gauge } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import type { Project, ProjectStatus } from "@/lib/types";
 import { PageHeader } from "@/components/ui/page-header";
@@ -18,12 +18,12 @@ import { ProjectDrawer } from "@/components/projects/project-drawer";
 type Filter = "all" | ProjectStatus;
 
 export default function ProjectsPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const projects = useStore((s) => s.projects);
   const [filter, setFilter] = useState<Filter>("all");
   const [selected, setSelected] = useState<Project | null>(null);
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const shown = filter === "all" ? projects : projects.filter((p) => p.status === filter);
   const active = projects.filter((p) => p.status === "active").length;

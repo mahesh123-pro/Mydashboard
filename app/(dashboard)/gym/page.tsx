@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { Dumbbell, Scale, Percent, Activity, Flame, Trophy, Plus } from "lucide-react";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import { bodyHeightCm } from "@/lib/data/seed";
 import { PageHeader } from "@/components/ui/page-header";
@@ -22,13 +22,13 @@ const TYPE_COLOR: Record<string, string> = {
 };
 
 export default function GymPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const body = useStore((s) => s.body);
   const workouts = useStore((s) => s.workouts);
   const prs = useStore((s) => s.prs);
   const addWorkout = useStore((s) => s.addWorkout);
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const latest = body[body.length - 1];
   const prev = body[body.length - 2] ?? latest;

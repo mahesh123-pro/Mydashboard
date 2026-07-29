@@ -8,7 +8,16 @@ export async function GET() {
     const client = await clientPromise;
     const db = client.db();
 
-    // Fetch all collections in parallel to optimize loading speed
+    // 1. Try to fetch the single consolidated dashboard document first
+    const doc = await db.collection<any>("dashboard").findOne({ _id: "dashboard" });
+    if (doc) {
+      const { _id, ...data } = doc;
+      return NextResponse.json({ success: true, data });
+    }
+
+    // 2. Fallback / Migration: If the consolidated document doesn't exist, query old collections
+    console.log("Single dashboard document not found. Querying individual collections (migration fallback)...");
+    
     const [
       tasks,
       meetings,
@@ -71,32 +80,44 @@ export async function GET() {
       return rest;
     };
 
+    const data = {
+      profile: cleanDoc(profileDoc),
+      tasks: mapArray(tasks),
+      meetings: mapArray(meetings),
+      activity: mapArray(activity),
+      notes: notesDoc ? notesDoc.list : undefined,
+      habits: mapArray(habits),
+      habitLog: habitLogsDoc ? habitLogsDoc.log : undefined,
+      healthLog: healthLogsDoc ? healthLogsDoc.log : undefined,
+      healthGoals: cleanDoc(healthGoalsDoc),
+      meals: cleanDoc(mealsDoc),
+      supplements: mapArray(supplements),
+      body: body.map(({ _id, ...rest }) => rest), // body has no id field, remove _id if any
+      workouts: mapArray(workouts),
+      prs: prs.map(({ _id, ...rest }) => rest), // prs has no id field, remove _id if any
+      projects: mapArray(projects),
+      finance: cleanDoc(financeDoc),
+      subscriptions: mapArray(subscriptions),
+      savingsGoals: mapArray(savingsGoals),
+      transactions: mapArray(transactions),
+      journal: mapArray(journal),
+      jobs: mapArray(jobs),
+      settings: cleanDoc(settingsDoc),
+    };
+
+    // If profile exists (meaning we have seeded/migratable user data), save it to the consolidated document
+    if (data.profile) {
+      console.log("Migrating individual collection data to single consolidated document...");
+      await db.collection<any>("dashboard").replaceOne(
+        { _id: "dashboard" },
+        { _id: "dashboard", ...data },
+        { upsert: true }
+      );
+    }
+
     return NextResponse.json({
       success: true,
-      data: {
-        profile: cleanDoc(profileDoc),
-        tasks: mapArray(tasks),
-        meetings: mapArray(meetings),
-        activity: mapArray(activity),
-        notes: notesDoc ? notesDoc.list : undefined,
-        habits: mapArray(habits),
-        habitLog: habitLogsDoc ? habitLogsDoc.log : undefined,
-        healthLog: healthLogsDoc ? healthLogsDoc.log : undefined,
-        healthGoals: cleanDoc(healthGoalsDoc),
-        meals: cleanDoc(mealsDoc),
-        supplements: mapArray(supplements),
-        body: body.map(({ _id, ...rest }) => rest), // body has no id field, remove _id if any
-        workouts: mapArray(workouts),
-        prs: prs.map(({ _id, ...rest }) => rest), // prs has no id field, remove _id if any
-        projects: mapArray(projects),
-        finance: cleanDoc(financeDoc),
-        subscriptions: mapArray(subscriptions),
-        savingsGoals: mapArray(savingsGoals),
-        transactions: mapArray(transactions),
-        journal: mapArray(journal),
-        jobs: mapArray(jobs),
-        settings: cleanDoc(settingsDoc),
-      },
+      data,
     });
   } catch (error: any) {
     console.error("Load failed:", error);

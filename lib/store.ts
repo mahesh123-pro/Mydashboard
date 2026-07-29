@@ -60,6 +60,9 @@ type State = {
 
   settings: AppSettings;
 
+  isLoading: boolean;
+  isSyncing: boolean;
+
   // ui (sidebar persisted, rest transient)
   sidebarCollapsed: boolean;
   commandOpen: boolean;
@@ -136,6 +139,8 @@ export const useStore = create<State>()(
   persist(
     (set, get) => ({
       ...initial(),
+      isLoading: true,
+      isSyncing: false,
       recentCommands: [],
       sidebarCollapsed: false,
       commandOpen: false,
@@ -299,8 +304,10 @@ export const useStore = create<State>()(
       storage: createJSONStorage(() => localStorage),
       skipHydration: true, // rehydrate manually after mount to avoid SSR mismatch
       partialize: (s) => {
-        const { commandOpen, ...rest } = s;
+        const { commandOpen, isLoading, isSyncing, ...rest } = s;
         void commandOpen;
+        void isLoading;
+        void isSyncing;
         return rest;
       },
     },

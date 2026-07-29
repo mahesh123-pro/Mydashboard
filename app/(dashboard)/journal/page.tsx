@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BookOpen, Smile, Meh, Frown, Laugh, PenLine } from "lucide-react";
 import { toast } from "sonner";
-import { useHydrated } from "@/lib/hooks";
+import { usePageReady } from "@/lib/hooks";
 import { useStore } from "@/lib/store";
 import type { JournalEntry } from "@/lib/types";
 import { dayKey, cn } from "@/lib/utils";
@@ -22,14 +22,14 @@ const MOODS: { key: JournalEntry["mood"]; icon: typeof Smile; color: string; lab
 ];
 
 export default function JournalPage() {
-  const hydrated = useHydrated();
+  const ready = usePageReady();
   const journal = useStore((s) => s.journal);
   const addJournal = useStore((s) => s.addJournal);
   const [mood, setMood] = useState<JournalEntry["mood"]>("good");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
-  if (!hydrated) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
