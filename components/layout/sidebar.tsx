@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -18,6 +19,15 @@ export function Sidebar() {
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // The nav list is taller than the panel on laptop screens, so the current
+  // page can sit below the fold — reachable via ⌘K but with no visible active
+  // state, which reads as "that page doesn't exist". Pull it into view.
+  const navRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const active = navRef.current?.querySelector<HTMLElement>("[data-active='true']");
+    active?.scrollIntoView({ block: "nearest" });
+  }, [pathname, collapsed]);
 
   return (
     <motion.aside
@@ -41,13 +51,13 @@ export function Sidebar() {
         </div>
 
         {/* nav */}
-        <nav className="no-scrollbar mt-2 flex-1 space-y-4 overflow-y-auto pr-0.5">
+        <nav ref={navRef} className="nav-scroll mt-2 flex-1 space-y-2.5 overflow-y-auto pr-1.5">
           {NAV_GROUPS.map((group) => {
             const items = NAV.filter((n) => n.group === group);
             return (
               <div key={group}>
                 {!collapsed && (
-                  <div className="px-2 pb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-2">
+                  <div className="px-2 pb-1 text-[10px] font-semibold uppercase tracking-widest text-muted-2">
                     {group}
                   </div>
                 )}
@@ -58,9 +68,10 @@ export function Sidebar() {
                       <Link
                         key={item.href}
                         href={item.href}
+                        data-active={active}
                         title={collapsed ? item.label : undefined}
                         className={cn(
-                          "group relative flex items-center gap-3 rounded-xl px-2.5 py-2 text-sm transition-colors",
+                          "group relative flex items-center gap-3 rounded-xl px-2.5 py-1.5 text-sm transition-colors",
                           collapsed && "justify-center",
                           active ? "text-foreground" : "text-muted hover:text-foreground",
                         )}
