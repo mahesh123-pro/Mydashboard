@@ -16,17 +16,17 @@ export function StoreHydrator() {
     let isHydratingOrLoading = true;
     let syncTimeout: NodeJS.Timeout;
 
-    // 1. Rehydrate local storage first
+    // 1. Rehydrate local storage first. This is synchronous and gives us a
+    //    complete, usable state immediately — so the UI is unblocked right
+    //    away rather than waiting on the network. The DB load below patches
+    //    in fresher values when (and if) it arrives.
     useStore.persist.rehydrate();
+    useStore.setState({ isLoading: false });
 
-    // Set a max load timeout of 6 seconds to avoid blocking the page indefinitely if MongoDB is slow/offline
+    // Safety net in case the request never settles at all.
     const fallbackTimeout = setTimeout(() => {
-      if (isHydratingOrLoading) {
-        console.warn("MongoDB load connection timed out. Falling back to local storage.");
-        useStore.setState({ isLoading: false });
-        isHydratingOrLoading = false;
-      }
-    }, 6000);
+      isHydratingOrLoading = false;
+    }, 10000);
 
     // 2. Fetch latest data from MongoDB
     async function loadFromDB() {
@@ -34,15 +34,19 @@ export function StoreHydrator() {
         const res = await fetch("/api/dashboard/load");
         const json = await res.json();
         if (json.success && json.data) {
-          // Update the store with the latest MongoDB data, and mark loading complete
-          useStore.setState({ ...json.data, isLoading: false });
-          toast.success("Sync complete: Loaded latest data from cloud database.");
-        } else {
-          useStore.setState({ isLoading: false });
+          // Only apply keys the server actually has a value for. A partial or
+          // freshly-seeded document would otherwise shallow-merge `undefined`
+          // over the local arrays/objects and blank out the whole dashboard.
+          const patch = Object.fromEntries(
+            Object.entries(json.data).filter(([, v]) => v !== undefined && v !== null),
+          );
+          if (Object.keys(patch).length > 0) {
+            useStore.setState(patch as Partial<ReturnType<typeof useStore.getState>>);
+            toast.success("Sync complete: Loaded latest data from cloud database.");
+          }
         }
       } catch (err) {
         console.error("Failed to load dashboard from MongoDB:", err);
-        useStore.setState({ isLoading: false });
       } finally {
         isHydratingOrLoading = false;
         clearTimeout(fallbackTimeout);

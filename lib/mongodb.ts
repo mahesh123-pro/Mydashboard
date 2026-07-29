@@ -1,33 +1,47 @@
 import { MongoClient } from "mongodb";
 
 const uri = process.env.MONGODB_URI as string;
-const options = {};
+// Fail fast instead of sitting on the driver's 30s default — a dashboard that
+// can't reach Atlas should fall back to local state in a couple of seconds,
+// not hang the request.
+const options = {
+  serverSelectionTimeoutMS: 5000,
+  connectTimeoutMS: 5000,
+};
 
-let client: MongoClient;
+let client: MongoClient | undefined;
 let clientPromise: Promise<MongoClient>;
 
 if (!process.env.MONGODB_URI) {
   // Don't throw at the top level so Next.js build doesn't fail
   console.warn('Invalid/Missing environment variable: "MONGODB_URI"');
   clientPromise = Promise.reject(new Error('Invalid/Missing environment variable: "MONGODB_URI"'));
+  // The route handlers catch this, but attach a no-op so an unused import
+  // never surfaces as an unhandled rejection.
+  clientPromise.catch(() => {});
 } else {
-  if (process.env.NODE_ENV === "development") {
-    // In development mode, use a global variable so that the value
-    // is preserved across module reloads caused by HMR (Hot Module Replacement).
-    const globalWithMongo = global as typeof globalThis & {
-      _mongoClientPromise?: Promise<MongoClient>;
-    };
+  // Cache on globalThis in every environment. In development this survives HMR
+  // module reloads; in production (serverless) it lets warm invocations of the
+  // same lambda reuse the existing connection pool instead of paying a fresh
+  // TLS + auth handshake on every request.
+  const globalWithMongo = globalThis as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>;
+    _mongoClient?: MongoClient;
+  };
 
-    if (!globalWithMongo._mongoClientPromise) {
-      client = new MongoClient(uri, options);
-      globalWithMongo._mongoClientPromise = client.connect();
-    }
-    clientPromise = globalWithMongo._mongoClientPromise;
-  } else {
-    // In production mode, it's best to not use a global variable.
-    client = new MongoClient(uri, options);
-    clientPromise = client.connect();
+  if (!globalWithMongo._mongoClientPromise) {
+    globalWithMongo._mongoClient = new MongoClient(uri, options);
+    globalWithMongo._mongoClientPromise = globalWithMongo._mongoClient.connect();
+    // If the initial connect fails, drop the cached promise so the next request
+    // retries rather than replaying the same rejection forever.
+    globalWithMongo._mongoClientPromise.catch(() => {
+      globalWithMongo._mongoClientPromise = undefined;
+      globalWithMongo._mongoClient = undefined;
+    });
   }
+
+  client = globalWithMongo._mongoClient;
+  clientPromise = globalWithMongo._mongoClientPromise;
 }
 
 // Export a module-scoped MongoClient promise. By doing this in a

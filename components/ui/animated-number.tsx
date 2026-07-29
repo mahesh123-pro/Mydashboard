@@ -8,7 +8,7 @@ export function AnimatedNumber({
   decimals = 0,
   prefix = "",
   suffix = "",
-  duration = 900,
+  duration = 550,
   className,
   format,
 }: {
