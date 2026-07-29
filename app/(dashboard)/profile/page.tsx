@@ -8,10 +8,10 @@ import {
   Camera,
   MapPin,
   Briefcase,
-  Github,
-  Twitter,
-  Linkedin,
   Globe,
+  Link,
+  MessageCircle,
+  Hash,
   Plus,
   X,
   User,
@@ -253,7 +253,7 @@ export default function ProfilePage() {
             <div className="space-y-3">
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-muted-2 flex items-center gap-1.5">
-                  <Github className="size-3.5" /> GitHub
+                  <Hash className="size-3.5" /> GitHub
                 </label>
                 <input
                   value={profile.socials?.github || ""}
@@ -264,7 +264,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-muted-2 flex items-center gap-1.5">
-                  <Twitter className="size-3.5" /> Twitter
+                  <MessageCircle className="size-3.5" /> Twitter
                 </label>
                 <input
                   value={profile.socials?.twitter || ""}
@@ -275,7 +275,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-muted-2 flex items-center gap-1.5">
-                  <Linkedin className="size-3.5" /> LinkedIn
+                  <Link className="size-3.5" /> LinkedIn
                 </label>
                 <input
                   value={profile.socials?.linkedin || ""}
