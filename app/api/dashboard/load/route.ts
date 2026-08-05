@@ -113,6 +113,15 @@ export async function GET() {
         { _id: "dashboard", ...data },
         { upsert: true }
       );
+    } else {
+      // If there is no legacy data at all, initialize the empty dashboard document
+      // so we don't query 22 empty collections on every future page load.
+      console.log("No legacy data found. Initializing empty consolidated dashboard document...");
+      await db.collection<any>("dashboard").replaceOne(
+        { _id: "dashboard" },
+        { _id: "dashboard", initialized: true },
+        { upsert: true }
+      );
     }
 
     return NextResponse.json({
