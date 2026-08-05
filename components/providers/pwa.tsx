@@ -44,9 +44,9 @@ export function PWA() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}
-          className="glass-strong fixed bottom-24 left-4 z-40 flex items-center gap-3 rounded-2xl p-2 pl-3 lg:bottom-6 lg:left-[300px]"
+          className="glass-strong fixed bottom-24 left-4 z-40 flex items-center gap-3 rounded-tile p-2 pl-3 lg:bottom-6 lg:left-[300px]"
         >
-          <div className="grid size-8 place-items-center rounded-lg bg-gradient-to-br from-primary to-secondary">
+          <div className="grid size-8 place-items-center rounded-control bg-gradient-to-br from-primary to-secondary">
             <Download className="size-4 text-white" />
           </div>
           <div className="text-xs">
@@ -55,14 +55,14 @@ export function PWA() {
           </div>
           <button
             onClick={install}
-            className="ml-1 rounded-lg bg-gradient-to-br from-primary to-secondary px-3 py-1.5 text-xs font-medium text-white cursor-pointer"
+            className="ml-1 rounded-control bg-gradient-to-br from-primary to-secondary px-3 py-1.5 text-xs font-medium text-white cursor-pointer"
           >
             Install
           </button>
           <button
             onClick={() => setDismissed(true)}
             aria-label="Dismiss"
-            className="grid size-7 place-items-center rounded-lg text-muted-2 transition-colors hover:text-foreground cursor-pointer"
+            className="grid size-7 place-items-center rounded-control text-muted-2 transition-colors hover:text-foreground cursor-pointer"
           >
             <X className="size-4" />
           </button>

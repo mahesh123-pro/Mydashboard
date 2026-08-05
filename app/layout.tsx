@@ -3,8 +3,9 @@ import { Geist, Geist_Mono, Fraunces } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { StoreHydrator } from "@/components/providers/store-hydrator";
+import { SettingsEffect } from "@/components/providers/settings-effect";
 import { PWA } from "@/components/providers/pwa";
-import { Toaster } from "sonner";
+import { Toasts } from "@/components/providers/toasts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,20 +62,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <StoreHydrator />
+          <SettingsEffect />
           <PWA />
           {children}
-          <Toaster
-            position="bottom-right"
-            theme="dark"
-            toastOptions={{
-              style: {
-                background: "var(--elevated)",
-                border: "1px solid var(--border-strong)",
-                color: "var(--foreground)",
-                backdropFilter: "blur(20px)",
-              },
-            }}
-          />
+          <Toasts />
         </ThemeProvider>
       </body>
     </html>

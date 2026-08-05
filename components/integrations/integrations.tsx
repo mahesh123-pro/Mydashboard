@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { GitBranch, Code2, Music, Plug, ExternalLink, RefreshCw, type LucideIcon } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
+import { ProgressBar } from "@/components/ui/progress-bar";
 
 /* ------------------------------- shell -------------------------------- */
 function Shell({
@@ -21,20 +22,20 @@ function Shell({
   right?: React.ReactNode;
 }) {
   return (
-    <GlassCard className="flex h-full flex-col p-5">
+    <GlassCard className="flex h-full flex-col p-6">
       <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="grid size-9 place-items-center rounded-xl" style={{ background: `${color}1f`, color }}>
+          <div className="grid size-9 place-items-center rounded-field" style={{ background: `${color}1f`, color }}>
             <Icon className="size-4" />
           </div>
           <h3 className="text-sm font-semibold">{name}</h3>
         </div>
         {right ?? (
           <span
-            className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px]"
+            className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-3xs"
             style={{
               color: connected ? "#22c55e" : "#a1a1aa",
-              background: connected ? "#22c55e1a" : "rgba(255,255,255,0.04)",
+              background: connected ? "#22c55e1a" : "var(--surface-hover)",
             }}
           >
             <span className="size-1.5 rounded-full" style={{ background: connected ? "#22c55e" : "#a1a1aa" }} />
@@ -50,12 +51,12 @@ function Shell({
 function Connect({ envVar, hint }: { envVar?: string; hint: string }) {
   return (
     <div className="flex h-full flex-col items-center justify-center py-6 text-center">
-      <div className="grid size-11 place-items-center rounded-2xl border border-border bg-white/[0.03] text-muted-2">
+      <div className="grid size-11 place-items-center rounded-tile border border-border bg-surface text-muted-2">
         <Plug className="size-5" />
       </div>
       <p className="mt-3 max-w-[15rem] text-xs text-muted-2">{hint}</p>
       {envVar && (
-        <code className="mt-3 rounded-lg border border-border bg-white/[0.03] px-2.5 py-1 font-mono text-[11px] text-muted">
+        <code className="mt-3 rounded-control border border-border bg-surface px-2.5 py-1 font-mono text-2xs text-muted">
           {envVar}
         </code>
       )}
@@ -66,7 +67,7 @@ function Connect({ envVar, hint }: { envVar?: string; hint: string }) {
 /* ------------------------------- github ------------------------------- */
 type GhData = { total: number; weeks: { level: number }[][] };
 
-const GH_LEVELS = ["rgba(255,255,255,0.06)", "#22c55e40", "#22c55e73", "#22c55eb3", "#22c55e"];
+const GH_LEVELS = ["var(--track)", "#22c55e40", "#22c55e73", "#22c55eb3", "#22c55e"];
 
 export function GithubWidget() {
   const user = process.env.NEXT_PUBLIC_GITHUB_USERNAME;
@@ -117,7 +118,7 @@ export function GithubWidget() {
       {!user ? (
         <Connect envVar="NEXT_PUBLIC_GITHUB_USERNAME" hint="Add your GitHub username to show your live contribution graph." />
       ) : state === "loading" ? (
-        <div className="skeleton h-24 w-full rounded-xl" />
+        <div className="skeleton h-24 w-full rounded-field" />
       ) : state === "error" ? (
         <div className="flex h-full items-center justify-center gap-2 py-6 text-xs text-muted-2">
           <RefreshCw className="size-3.5" /> Couldn&apos;t load contributions
@@ -192,7 +193,7 @@ export function LeetcodeWidget() {
       {!user ? (
         <Connect envVar="NEXT_PUBLIC_LEETCODE_USERNAME" hint="Add your LeetCode username to track solved problems and ranking." />
       ) : state === "loading" ? (
-        <div className="skeleton h-24 w-full rounded-xl" />
+        <div className="skeleton h-24 w-full rounded-field" />
       ) : state === "error" ? (
         <div className="flex h-full items-center justify-center gap-2 py-6 text-xs text-muted-2">
           <RefreshCw className="size-3.5" /> Couldn&apos;t load stats
@@ -203,18 +204,16 @@ export function LeetcodeWidget() {
             <div className="text-2xl font-semibold tabular">
               {data!.total} <span className="text-xs font-normal text-muted-2">solved</span>
             </div>
-            <div className="text-[11px] text-muted-2">Rank #{data!.ranking.toLocaleString()}</div>
+            <div className="text-2xs text-muted-2">Rank #{data!.ranking.toLocaleString()}</div>
           </div>
           <div className="space-y-2">
             {rows.map((r) => (
               <div key={r.label}>
-                <div className="mb-1 flex justify-between text-[11px]">
+                <div className="mb-1 flex justify-between text-2xs">
                   <span className="text-muted">{r.label}</span>
                   <span className="tabular text-muted-2">{r.value}</span>
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-                  <div className="h-full rounded-full" style={{ width: `${(r.value / max) * 100}%`, background: r.color }} />
-                </div>
+                <ProgressBar value={(r.value / max) * 100} color={r.color} gradient={false} label={r.label} />
               </div>
             ))}
           </div>

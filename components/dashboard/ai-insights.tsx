@@ -5,30 +5,25 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { seedInsights } from "@/lib/data/seed";
 import { getIcon } from "@/lib/icon-map";
+import { SectionCard } from "@/components/ui/section-card";
 
 export function AIInsights() {
   return (
-    <div className="glass relative overflow-hidden rounded-3xl p-6">
-      <div
-        className="pointer-events-none absolute -left-10 -top-10 size-40 rounded-full opacity-20 blur-3xl"
-        style={{ background: "radial-gradient(circle, #059669, transparent 60%)" }}
-      />
-      <div className="relative flex items-center justify-between">
-        <h3 className="inline-flex items-center gap-2 text-sm font-semibold">
-          <span className="grid size-6 place-items-center rounded-lg bg-gradient-to-br from-primary to-secondary">
-            <Sparkles className="size-3.5 text-white" />
-          </span>
-          AI Morning Brief
-        </h3>
+    <SectionCard
+      icon={Sparkles}
+      iconColor="var(--color-primary)"
+      title="AI Morning Brief"
+      description="Patterns picked out of this week's data"
+      action={
         <Link
           href="/assistant"
-          className="inline-flex items-center gap-1 text-[11px] text-muted-2 transition-colors hover:text-foreground"
+          className="inline-flex items-center gap-1 text-2xs text-muted-2 transition-colors hover:text-foreground"
         >
-          Open Assistant <ArrowRight className="size-3" />
+          Open Assistant <ArrowRight className="size-3" aria-hidden />
         </Link>
-      </div>
-
-      <div className="relative mt-4 grid gap-3 sm:grid-cols-2">
+      }
+      bodyClassName="grid gap-3 sm:grid-cols-2"
+    >
         {seedInsights.map((ins, i) => {
           const Icon = getIcon(ins.icon);
           return (
@@ -37,10 +32,10 @@ export function AIInsights() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.06 * i, duration: 0.4 }}
-              className="flex gap-3 rounded-2xl border border-border bg-white/[0.02] p-3.5"
+              className="flex gap-3 rounded-tile border border-border bg-surface p-3.5"
             >
               <div
-                className="grid size-9 shrink-0 place-items-center rounded-xl"
+                className="grid size-9 shrink-0 place-items-center rounded-field"
                 style={{ background: `${ins.color}1f`, color: ins.color, boxShadow: `inset 0 0 0 1px ${ins.color}33` }}
               >
                 <Icon className="size-4" />
@@ -52,7 +47,6 @@ export function AIInsights() {
             </motion.div>
           );
         })}
-      </div>
-    </div>
+    </SectionCard>
   );
 }

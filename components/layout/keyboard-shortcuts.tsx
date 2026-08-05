@@ -101,7 +101,7 @@ export function KeyboardShortcuts() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
-            className="glass-strong fixed bottom-24 left-1/2 z-[90] -translate-x-1/2 rounded-xl px-3 py-2 text-xs text-muted lg:bottom-6"
+            className="glass-strong fixed bottom-24 left-1/2 z-[90] -translate-x-1/2 rounded-field px-3 py-2 text-xs text-muted lg:bottom-6"
           >
             <span className="font-mono text-foreground">g</span> then a key… (d, h, w, p, f, j, s)
           </motion.div>
@@ -123,7 +123,7 @@ export function KeyboardShortcuts() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.97, y: 8 }}
               transition={{ type: "spring", stiffness: 380, damping: 30 }}
-              className="glass-strong relative w-full max-w-2xl overflow-hidden rounded-2xl p-6"
+              className="glass-strong relative w-full max-w-2xl overflow-hidden rounded-tile p-6"
             >
               <div className="flex items-center justify-between">
                 <h3 className="inline-flex items-center gap-2 text-base font-semibold">
@@ -131,7 +131,7 @@ export function KeyboardShortcuts() {
                 </h3>
                 <button
                   onClick={() => setHelp(false)}
-                  className="grid size-8 place-items-center rounded-lg text-muted-2 transition-colors hover:bg-white/[0.06] hover:text-foreground cursor-pointer"
+                  className="grid size-8 place-items-center rounded-control text-muted-2 transition-colors hover:bg-surface-strong hover:text-foreground cursor-pointer"
                 >
                   <X className="size-4" />
                 </button>
@@ -139,7 +139,7 @@ export function KeyboardShortcuts() {
               <div className="mt-5 grid gap-6 sm:grid-cols-2">
                 {SHORTCUT_GROUPS.map((group) => (
                   <div key={group.title}>
-                    <div className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-2">
+                    <div className="mb-2 text-2xs font-semibold uppercase tracking-widest text-muted-2">
                       {group.title}
                     </div>
                     <div className="space-y-1.5">
@@ -150,7 +150,7 @@ export function KeyboardShortcuts() {
                             {row.keys.map((k, i) => (
                               <kbd
                                 key={i}
-                                className="grid h-6 min-w-6 place-items-center rounded-md border border-border bg-white/[0.04] px-1.5 font-mono text-[11px] text-foreground"
+                                className="grid h-6 min-w-6 place-items-center rounded-control border border-border bg-surface-hover px-1.5 font-mono text-2xs text-foreground"
                               >
                                 {k}
                               </kbd>

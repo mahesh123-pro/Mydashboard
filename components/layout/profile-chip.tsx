@@ -1,6 +1,7 @@
 "use client";
 
 import { useStore } from "@/lib/store";
+import { ProgressBar } from "@/components/ui/progress-bar";
 import { levelFromXp, initials, cn } from "@/lib/utils";
 import { Flame } from "lucide-react";
 
@@ -10,42 +11,37 @@ export function ProfileChip({ compact = false }: { compact?: boolean }) {
 
   if (compact) {
     return (
-      <div className="flex items-center gap-2.5 rounded-xl border border-border bg-white/[0.03] py-1.5 pl-1.5 pr-3">
+      <div className="flex items-center gap-2.5 rounded-field border border-border bg-surface py-1.5 pl-1.5 pr-3">
         <Avatar name={profile.name} url={profile.avatarUrl} color={profile.avatarColor} size={30} />
         <div className="leading-tight">
           <div className="text-xs font-semibold">{profile.name}</div>
-          <div className="text-[10px] text-muted-2">Lvl {level}</div>
+          <div className="text-3xs text-muted-2">Lvl {level}</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="rounded-2xl border border-border bg-white/[0.03] p-3">
+    <div className="rounded-tile border border-border bg-surface p-3">
       <div className="flex items-center gap-3">
         <Avatar name={profile.name} url={profile.avatarUrl} color={profile.avatarColor} size={40} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between">
             <span className="truncate text-sm font-semibold">{profile.name}</span>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-warning">
+            <span className="inline-flex items-center gap-1 text-2xs font-semibold text-warning">
               <Flame className="size-3" />
               {profile.streak}
             </span>
           </div>
-          <div className="text-[11px] text-muted-2">Level {level}</div>
+          <div className="text-2xs text-muted-2">Level {level}</div>
         </div>
       </div>
       <div className="mt-3">
-        <div className="mb-1 flex items-center justify-between text-[10px] text-muted-2">
+        <div className="mb-1 flex items-center justify-between text-3xs text-muted-2">
           <span>{profile.xp.toLocaleString("en-IN")} XP</span>
           <span>{progress}%</span>
         </div>
-        <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-primary to-accent transition-[width] duration-700"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <ProgressBar value={progress} color="#10b981" label={`Level ${level} progress`} />
       </div>
     </div>
   );

@@ -24,7 +24,7 @@ export function EmptyState({
         className,
       )}
     >
-      <div className="grid size-12 place-items-center rounded-2xl border border-border bg-white/[0.03] text-muted-2">
+      <div className="grid size-12 place-items-center rounded-tile border border-border bg-surface text-muted-2">
         <Icon className="size-6" />
       </div>
       <p className="mt-3 text-sm font-medium text-foreground">{title}</p>

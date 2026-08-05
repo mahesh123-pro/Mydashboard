@@ -15,7 +15,7 @@ export function Segmented<T extends string>({
   className?: string;
 }) {
   return (
-    <div className={cn("inline-flex items-center gap-1 rounded-xl border border-border bg-white/[0.03] p-1", className)}>
+    <div className={cn("inline-flex items-center gap-1 rounded-field border border-border bg-surface p-1", className)}>
       {options.map((o) => {
         const active = o.value === value;
         return (
@@ -23,14 +23,14 @@ export function Segmented<T extends string>({
             key={o.value}
             onClick={() => onChange(o.value)}
             className={cn(
-              "relative rounded-lg px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer",
+              "relative rounded-control px-3 py-1.5 text-xs font-medium transition-colors cursor-pointer",
               active ? "text-white" : "text-muted hover:text-foreground",
             )}
           >
             {active && (
               <motion.span
                 layoutId={`seg-${options.map((x) => x.value).join("")}`}
-                className="absolute inset-0 rounded-lg bg-gradient-to-br from-primary to-secondary"
+                className="absolute inset-0 rounded-control bg-gradient-to-br from-primary to-secondary"
                 transition={{ type: "spring", stiffness: 400, damping: 32 }}
               />
             )}

@@ -23,6 +23,15 @@ export function formatCurrency(n: number, currency = "INR", compact = false) {
   }).format(n);
 }
 
+const CURRENCY_SYMBOL: Record<string, string> = {
+  INR: "₹", USD: "$", EUR: "€", GBP: "£", JPY: "¥", AUD: "A$", CAD: "C$",
+};
+
+/** Bare currency symbol for chart prefixes / inline labels (no amount). */
+export function currencySymbol(currency = "INR") {
+  return CURRENCY_SYMBOL[currency] ?? "₹";
+}
+
 export function formatNumber(n: number, compact = false) {
   return new Intl.NumberFormat("en-IN", {
     notation: compact ? "compact" : "standard",

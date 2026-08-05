@@ -25,7 +25,7 @@ const axisStyle = {
 function ChartTooltip({ active, payload, label, valuePrefix = "", valueSuffix = "" }: any) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="glass-strong rounded-xl px-3 py-2 text-xs shadow-xl">
+    <div className="glass-strong rounded-field px-3 py-2 text-xs shadow-xl">
       {label !== undefined && <div className="mb-1 font-medium text-muted">{label}</div>}
       {payload.map((p: any, i: number) => (
         <div key={i} className="flex items-center gap-2 tabular">
@@ -114,7 +114,7 @@ export function BarTrend({
         </defs>
         <XAxis dataKey={xKey} tick={axisStyle} axisLine={false} tickLine={false} />
         <YAxis tick={axisStyle} axisLine={false} tickLine={false} width={44} />
-        <Tooltip content={<ChartTooltip valueSuffix={suffix} />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
+        <Tooltip content={<ChartTooltip valueSuffix={suffix} />} cursor={{ fill: "var(--surface-hover)" }} />
         <Bar dataKey={dataKey} fill={`url(#bar-${color.replace("#", "")})`} radius={[6, 6, 0, 0]} maxBarSize={38} />
       </BarChart>
     </ResponsiveContainer>
@@ -175,7 +175,7 @@ export function RadialGauge({
         endAngle={-270}
       >
         <PolarAngleAxis type="number" domain={[0, 100]} tick={false} />
-        <RadialBar dataKey="value" cornerRadius={20} fill={color} background={{ fill: "rgba(255,255,255,0.06)" }} />
+        <RadialBar dataKey="value" cornerRadius={20} fill={color} background={{ fill: "var(--track)" }} />
         <text x="50%" y="47%" textAnchor="middle" className="fill-foreground" style={{ fontSize: 22, fontWeight: 700 }}>
           {value}%
         </text>

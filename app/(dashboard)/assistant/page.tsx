@@ -36,7 +36,7 @@ export default function AssistantPage() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, thinking]);
 
-  if (!ready) return <Skeleton className="h-[70vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[70vh] rounded-panel" />;
 
   const buildContext = (): AssistantContext => {
     const { done, total } = habitCompletion(s);
@@ -86,7 +86,7 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         icon={Sparkles}
         title="AI Assistant"
@@ -95,10 +95,10 @@ export default function AssistantPage() {
         actions={
           <span
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px]",
+              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-3xs",
               source === "claude"
                 ? "border-success/40 bg-success/10 text-success"
-                : "border-border bg-white/[0.03] text-muted-2",
+                : "border-border bg-surface text-muted-2",
             )}
           >
             <span className={cn("size-1.5 rounded-full", source === "claude" ? "bg-success" : "bg-muted-2")} />
@@ -107,7 +107,7 @@ export default function AssistantPage() {
         }
       />
 
-      <div className="glass flex h-[calc(100vh-15rem)] min-h-[520px] flex-col rounded-3xl">
+      <div className="panel flex h-[calc(100vh-15rem)] min-h-[520px] flex-col rounded-panel">
         <div className="no-scrollbar flex-1 space-y-4 overflow-y-auto p-6">
           {messages.map((m, i) => (
             <motion.div
@@ -117,7 +117,7 @@ export default function AssistantPage() {
               className={cn("flex items-start gap-3", m.role === "user" && "flex-row-reverse")}
             >
               {m.role === "ai" ? (
-                <div className="grid size-8 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary">
+                <div className="grid size-8 shrink-0 place-items-center rounded-field bg-gradient-to-br from-primary to-secondary">
                   <Sparkles className="size-4 text-white" />
                 </div>
               ) : (
@@ -125,8 +125,8 @@ export default function AssistantPage() {
               )}
               <div
                 className={cn(
-                  "max-w-[78%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
-                  m.role === "ai" ? "border border-border bg-white/[0.03] text-foreground" : "bg-gradient-to-br from-primary to-secondary text-white",
+                  "max-w-[78%] rounded-tile px-4 py-2.5 text-sm leading-relaxed",
+                  m.role === "ai" ? "border border-border bg-surface text-foreground" : "bg-gradient-to-br from-primary to-secondary text-white",
                 )}
               >
                 {m.text}
@@ -136,10 +136,10 @@ export default function AssistantPage() {
           <AnimatePresence>
             {thinking && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-3">
-                <div className="grid size-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary">
+                <div className="grid size-8 place-items-center rounded-field bg-gradient-to-br from-primary to-secondary">
                   <Sparkles className="size-4 text-white" />
                 </div>
-                <div className="flex gap-1 rounded-2xl border border-border bg-white/[0.03] px-4 py-3.5">
+                <div className="flex gap-1 rounded-tile border border-border bg-surface px-4 py-3.5">
                   {[0, 1, 2].map((d) => (
                     <motion.span
                       key={d}
@@ -161,7 +161,7 @@ export default function AssistantPage() {
               <button
                 key={p.label}
                 onClick={() => send(p.label)}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-white/[0.03] px-3 py-1.5 text-xs text-muted transition-colors hover:text-foreground hover:border-border-strong cursor-pointer"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted transition-colors hover:text-foreground hover:border-border-strong cursor-pointer"
               >
                 <p.icon className="size-3.5" /> {p.label}
               </button>
@@ -178,9 +178,9 @@ export default function AssistantPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask your assistant…"
-              className="h-11 flex-1 rounded-xl border border-border bg-white/[0.03] px-4 text-sm outline-none focus:border-primary/50"
+              className="h-11 flex-1 rounded-field border border-border bg-surface px-4 text-sm outline-none focus:border-primary/50"
             />
-            <button type="submit" className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white cursor-pointer">
+            <button type="submit" className="grid size-11 place-items-center rounded-field bg-gradient-to-br from-primary to-secondary text-white cursor-pointer">
               <Send className="size-4" />
             </button>
           </form>

@@ -26,15 +26,15 @@ export function MealPlanner() {
         const items = meals[slot];
         const kcal = items.reduce((a, m) => a + m.kcal, 0);
         return (
-          <div key={slot} className="glass rounded-3xl p-5">
+          <div key={slot} className="panel rounded-panel p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="grid size-9 place-items-center rounded-xl" style={{ background: `${color}1f`, color }}>
+                <div className="grid size-9 place-items-center rounded-field" style={{ background: `${color}1f`, color }}>
                   <Icon className="size-4" />
                 </div>
                 <div>
                   <div className="text-sm font-semibold">{slot}</div>
-                  <div className="text-[11px] text-muted-2 tabular">{kcal} kcal</div>
+                  <div className="text-2xs text-muted-2 tabular">{kcal} kcal</div>
                 </div>
               </div>
             </div>
@@ -48,11 +48,11 @@ export function MealPlanner() {
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, x: -8 }}
-                    className="group flex items-center gap-2 rounded-xl border border-border bg-white/[0.02] px-3 py-2"
+                    className="group flex items-center gap-2 rounded-field border border-border bg-surface px-3 py-2"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="truncate text-sm">{m.name}</div>
-                      <div className="text-[10px] text-muted-2 tabular">
+                      <div className="text-3xs text-muted-2 tabular">
                         {m.kcal} kcal · {m.protein}p · {m.carbs}c · {m.fat}f
                       </div>
                     </div>
@@ -113,7 +113,7 @@ function AddMeal({
     return (
       <button
         onClick={() => setOpen(true)}
-        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-border-strong py-2 text-xs text-muted-2 transition-colors hover:text-foreground cursor-pointer"
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-field border border-dashed border-border-strong py-2 text-xs text-muted-2 transition-colors hover:text-foreground cursor-pointer"
       >
         <Plus className="size-3.5" /> Add item
       </button>
@@ -127,7 +127,7 @@ function AddMeal({
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Food name"
-        className="h-9 w-full rounded-lg border border-border bg-white/[0.03] px-2.5 text-xs outline-none focus:border-primary/50"
+        className="h-9 w-full rounded-control border border-border bg-surface px-2.5 text-xs outline-none focus:border-primary/50"
       />
       <div className="flex gap-2">
         <input
@@ -135,20 +135,20 @@ function AddMeal({
           onChange={(e) => setKcal(e.target.value)}
           placeholder="kcal"
           inputMode="numeric"
-          className="h-9 w-full rounded-lg border border-border bg-white/[0.03] px-2.5 text-xs outline-none focus:border-primary/50"
+          className="h-9 w-full rounded-control border border-border bg-surface px-2.5 text-xs outline-none focus:border-primary/50"
         />
         <input
           value={protein}
           onChange={(e) => setProtein(e.target.value)}
           placeholder="protein g"
           inputMode="numeric"
-          className="h-9 w-full rounded-lg border border-border bg-white/[0.03] px-2.5 text-xs outline-none focus:border-primary/50"
+          className="h-9 w-full rounded-control border border-border bg-surface px-2.5 text-xs outline-none focus:border-primary/50"
         />
       </div>
       <div className="flex gap-2">
         <button
           type="submit"
-          className={cn("h-9 flex-1 rounded-lg text-xs font-medium text-white cursor-pointer")}
+          className={cn("h-9 flex-1 rounded-control text-xs font-medium text-white cursor-pointer")}
           style={{ background: color }}
         >
           Add
@@ -156,7 +156,7 @@ function AddMeal({
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="h-9 rounded-lg border border-border px-3 text-xs text-muted-2 cursor-pointer"
+          className="h-9 rounded-control border border-border px-3 text-xs text-muted-2 cursor-pointer"
         >
           Cancel
         </button>

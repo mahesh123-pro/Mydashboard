@@ -6,6 +6,7 @@ import type { Project } from "@/lib/types";
 import { useStore } from "@/lib/store";
 import { StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { ProgressBar } from "@/components/ui/progress-bar";
 
 export function ProjectDrawer({ project, onClose }: { project: Project | null; onClose: () => void }) {
   const toggleMilestone = useStore((s) => s.toggleMilestone);
@@ -39,7 +40,7 @@ export function ProjectDrawer({ project, onClose }: { project: Project | null; o
                   </div>
                 </div>
               </div>
-              <button onClick={onClose} className="grid size-9 place-items-center rounded-xl border border-border text-muted hover:text-foreground cursor-pointer">
+              <button onClick={onClose} className="grid size-9 place-items-center rounded-field border border-border text-muted hover:text-foreground cursor-pointer">
                 <X className="size-4" />
               </button>
             </div>
@@ -57,22 +58,14 @@ export function ProjectDrawer({ project, onClose }: { project: Project | null; o
                 <span>Overall progress</span>
                 <span className="tabular font-medium">{project.progress}%</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{ background: project.color }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${project.progress}%` }}
-                  transition={{ duration: 0.7 }}
-                />
-              </div>
+              <ProgressBar value={project.progress} color={project.color} size="md" gradient={false} label="Overall progress" />
             </div>
 
             <div className="mt-5">
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-muted-2">Tech stack</h3>
               <div className="flex flex-wrap gap-1.5">
                 {project.tech.map((t) => (
-                  <span key={t} className="rounded-lg border border-border bg-white/[0.03] px-2 py-1 text-[11px] text-muted">
+                  <span key={t} className="rounded-control border border-border bg-surface px-2 py-1 text-2xs text-muted">
                     {t}
                   </span>
                 ))}
@@ -86,11 +79,11 @@ export function ProjectDrawer({ project, onClose }: { project: Project | null; o
                   <button
                     key={i}
                     onClick={() => toggleMilestone(project.id, i)}
-                    className="group flex w-full items-center gap-3 rounded-xl border border-border bg-white/[0.02] p-2.5 text-left transition-colors hover:border-border-strong"
+                    className="group flex w-full items-center gap-3 rounded-field border border-border bg-surface p-2.5 text-left transition-colors hover:border-border-strong"
                   >
                     <span
                       className={cn(
-                        "grid size-5 shrink-0 place-items-center rounded-md border transition-colors",
+                        "grid size-5 shrink-0 place-items-center rounded-control border transition-colors",
                         m.done ? "border-transparent bg-success text-white" : "border-border-strong text-transparent",
                       )}
                     >
@@ -109,7 +102,7 @@ export function ProjectDrawer({ project, onClose }: { project: Project | null; o
                     href={`https://${project.repo}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-border-strong text-sm text-muted transition-colors hover:text-foreground"
+                    className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-field border border-border-strong text-sm text-muted transition-colors hover:text-foreground"
                   >
                     <GitBranch className="size-4" /> Repo
                   </a>
@@ -119,7 +112,7 @@ export function ProjectDrawer({ project, onClose }: { project: Project | null; o
                     href={`https://${project.deploy}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-primary to-secondary text-sm font-medium text-white"
+                    className="inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-field bg-gradient-to-br from-primary to-secondary text-sm font-medium text-white"
                   >
                     <ExternalLink className="size-4" /> Live
                   </a>
@@ -135,10 +128,10 @@ export function ProjectDrawer({ project, onClose }: { project: Project | null; o
 
 function MiniStat({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-border bg-white/[0.02] p-2.5 text-center">
+    <div className="rounded-field border border-border bg-surface p-2.5 text-center">
       <Icon className="mx-auto size-4 text-muted-2" />
       <div className="mt-1 text-sm font-semibold tabular">{value}</div>
-      <div className="text-[10px] text-muted-2">{label}</div>
+      <div className="text-3xs text-muted-2">{label}</div>
     </div>
   );
 }

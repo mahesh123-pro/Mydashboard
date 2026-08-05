@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { StickyNote, Plus, X, NotebookPen } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { EmptyState } from "@/components/ui/empty-state";
+import { SectionCard } from "@/components/ui/section-card";
 
 export function QuickNotes() {
   const notes = useStore((s) => s.notes);
@@ -20,11 +21,37 @@ export function QuickNotes() {
   };
 
   return (
-    <div className="glass flex h-full flex-col rounded-3xl p-6">
-      <h3 className="inline-flex items-center gap-2 text-sm font-semibold">
-        <StickyNote className="size-4 text-warning" /> Quick Notes
-      </h3>
-      <div className="no-scrollbar mt-4 flex-1 space-y-2 overflow-y-auto">
+    <SectionCard
+      fill
+      scroll
+      icon={StickyNote}
+      iconColor="var(--color-warning)"
+      title="Quick Notes"
+      description={notes.length ? `${notes.length} saved` : "Scratchpad for loose thoughts"}
+      bodyClassName="space-y-2"
+      footer={
+        <form onSubmit={submit} className="flex items-center gap-2">
+          <label htmlFor="new-note" className="sr-only">
+            New note
+          </label>
+          <input
+            id="new-note"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Jot something down…"
+            className="h-10 flex-1 rounded-field border border-border bg-surface px-3 text-sm outline-none placeholder:text-muted-2 focus:border-warning/50"
+          />
+          <button
+            type="submit"
+            aria-label="Add note"
+            className="grid size-10 shrink-0 cursor-pointer place-items-center rounded-field bg-warning/20 text-warning"
+          >
+            <Plus className="size-4" aria-hidden />
+          </button>
+        </form>
+      }
+    >
+      <>
         {notes.length === 0 && (
           <EmptyState icon={NotebookPen} title="No notes yet" description="Capture a fleeting thought below." compact />
         )}
@@ -36,7 +63,7 @@ export function QuickNotes() {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, x: -10 }}
-              className="group flex items-start gap-2 rounded-xl border border-border bg-white/[0.02] p-3"
+              className="group flex items-start gap-2 rounded-field border border-border bg-surface p-3"
             >
               <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-warning" />
               <span className="min-w-0 flex-1 text-sm text-muted">{n}</span>
@@ -49,18 +76,7 @@ export function QuickNotes() {
             </motion.div>
           ))}
         </AnimatePresence>
-      </div>
-      <form onSubmit={submit} className="mt-3 flex items-center gap-2">
-        <input
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="Jot something down…"
-          className="h-10 flex-1 rounded-xl border border-border bg-white/[0.03] px-3 text-sm outline-none placeholder:text-muted-2 focus:border-warning/50"
-        />
-        <button type="submit" className="grid size-10 shrink-0 place-items-center rounded-xl bg-warning/20 text-warning cursor-pointer">
-          <Plus className="size-4" />
-        </button>
-      </form>
-    </div>
+      </>
+    </SectionCard>
   );
 }

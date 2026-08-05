@@ -31,7 +31,7 @@ export function PageHeader({
       <div className="flex items-center gap-4">
         {Icon && (
           <div
-            className="grid size-11 shrink-0 place-items-center rounded-2xl"
+            className="grid size-11 shrink-0 place-items-center rounded-tile"
             style={{ background: `${accent}17`, color: accent, boxShadow: `inset 0 0 0 1px ${accent}2e` }}
           >
             <Icon className="size-[22px]" />
@@ -39,7 +39,7 @@ export function PageHeader({
         )}
         <div>
           {eyebrow && <div className="eyebrow mb-1.5">{eyebrow}</div>}
-          <h1 className="font-display text-[1.7rem] leading-none sm:text-[2rem]">{title}</h1>
+          <h1 className="font-display text-display-sm sm:text-display-md">{title}</h1>
           {subtitle && <p className="mt-1.5 text-sm text-muted">{subtitle}</p>}
         </div>
       </div>

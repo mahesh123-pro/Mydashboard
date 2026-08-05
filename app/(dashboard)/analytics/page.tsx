@@ -14,15 +14,18 @@ export default function AnalyticsPage() {
   const ready = usePageReady();
   const s = useStore();
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
 
   const ids = s.habits.map((h) => h.id);
+  // Guard against empty collections so the aggregates below never divide by 0.
+  const habitCount = ids.length || 1;
+  const taskCount = s.tasks.length || 1;
   const trend = Array.from({ length: 21 }).map((_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (20 - i));
     const key = dayKey(d);
     const c = ids.filter((id) => s.habitLog[id]?.[key]).length;
-    return { date: d.toLocaleDateString("en-US", { day: "numeric", month: "short" }), value: Math.round((c / ids.length) * 100) };
+    return { date: d.toLocaleDateString("en-US", { day: "numeric", month: "short" }), value: Math.round((c / habitCount) * 100) };
   });
 
   let done30 = 0;
@@ -31,10 +34,10 @@ export default function AnalyticsPage() {
     d.setDate(d.getDate() - i);
     done30 += ids.filter((id) => s.habitLog[id]?.[dayKey(d)]).length;
   }
-  const habitRate = Math.round((done30 / (30 * ids.length)) * 100);
+  const habitRate = Math.round((done30 / (30 * habitCount)) * 100);
   const tasksDone = s.tasks.filter((t) => t.done).length;
   const savingsRate = Math.round(((s.finance.monthlyIncome - s.finance.monthlyExpenses) / s.finance.monthlyIncome) * 100);
-  const lifeScore = Math.round(habitRate * 0.4 + (tasksDone / s.tasks.length) * 100 * 0.25 + savingsRate * 0.15 + Math.min(100, s.profile.streak * 3) * 0.2);
+  const lifeScore = Math.round(habitRate * 0.4 + (tasksDone / taskCount) * 100 * 0.25 + savingsRate * 0.15 + Math.min(100, s.profile.streak * 3) * 0.2);
 
   const hours = [
     { label: "Coding", value: 28 },
@@ -52,7 +55,7 @@ export default function AnalyticsPage() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader icon={LineChart} title="Analytics" subtitle="The story your data tells." accent="#14b8a6" />
 
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
@@ -86,10 +89,10 @@ export default function AnalyticsPage() {
           <h3 className="mb-3 inline-flex items-center gap-2 text-sm font-semibold text-muted">
             <TrendingUp className="size-4 text-success" /> Recommendations
           </h3>
-          <div className="space-y-2.5">
+          <div className="space-y-2">
             {recs.map((r, i) => (
-              <div key={i} className="flex gap-2.5 rounded-xl border border-border bg-white/[0.02] p-3 text-xs leading-relaxed text-muted">
-                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-md bg-primary/15 text-[10px] font-semibold text-primary">
+              <div key={i} className="flex gap-2.5 rounded-field border border-border bg-surface p-3 text-xs leading-relaxed text-muted">
+                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-control bg-primary/15 text-3xs font-semibold text-primary">
                   {i + 1}
                 </span>
                 {r}

@@ -32,7 +32,7 @@ export default function ProfilePage() {
   const avatarRef = useRef<HTMLInputElement>(null);
   const coverRef = useRef<HTMLInputElement>(null);
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: "avatar" | "cover") => {
     const file = e.target.files?.[0];
@@ -96,7 +96,7 @@ export default function ProfilePage() {
           )}
           <button
             onClick={() => coverRef.current?.click()}
-            className="absolute bottom-4 right-4 flex items-center gap-2 rounded-xl bg-black/50 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-black/70 cursor-pointer"
+            className="absolute bottom-4 right-4 flex items-center gap-2 rounded-field bg-black/50 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-black/70 cursor-pointer"
           >
             <ImageIcon className="size-4" /> Change Cover
           </button>
@@ -112,7 +112,7 @@ export default function ProfilePage() {
         <div className="relative px-6 pb-6 sm:px-10">
           <div className="relative -mt-16 sm:-mt-20 flex justify-between items-end">
             <div className="group relative">
-              <div className="rounded-3xl border-4 border-[var(--background)] bg-background">
+              <div className="rounded-panel border-4 border-[var(--background)] bg-background">
                 {profile.avatarUrl ? (
                   <img
                     src={profile.avatarUrl}
@@ -125,7 +125,7 @@ export default function ProfilePage() {
               </div>
               <button
                 onClick={() => avatarRef.current?.click()}
-                className="absolute inset-0 m-1 flex items-center justify-center rounded-3xl bg-black/50 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 cursor-pointer text-white"
+                className="absolute inset-0 m-1 flex items-center justify-center rounded-panel bg-black/50 opacity-0 backdrop-blur-sm transition-opacity group-hover:opacity-100 cursor-pointer text-white"
               >
                 <Camera className="size-8" />
               </button>
@@ -145,7 +145,7 @@ export default function ProfilePage() {
               <p className="mt-1 text-lg text-muted">{profile.role || "Your Role"}</p>
             </div>
             {profile.location && (
-              <div className="flex items-center gap-2 text-sm text-muted-2 bg-white/[0.03] px-3 py-1.5 rounded-full border border-border">
+              <div className="flex items-center gap-2 text-sm text-muted-2 bg-surface px-3 py-1.5 rounded-full border border-border">
                 <MapPin className="size-4" />
                 {profile.location}
               </div>
@@ -168,7 +168,7 @@ export default function ProfilePage() {
                   value={profile.name}
                   onChange={(e) => setProfile({ name: e.target.value })}
                   placeholder="Mahesh"
-                  className="h-10 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                  className="h-10 w-full rounded-field border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                 />
               </div>
               <div className="space-y-1.5">
@@ -177,7 +177,7 @@ export default function ProfilePage() {
                   value={profile.role}
                   onChange={(e) => setProfile({ role: e.target.value })}
                   placeholder="Software Engineer"
-                  className="h-10 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                  className="h-10 w-full rounded-field border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                 />
               </div>
               <div className="space-y-1.5 sm:col-span-2">
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                   onChange={(e) => setProfile({ bio: e.target.value })}
                   placeholder="A short bio..."
                   rows={3}
-                  className="w-full resize-none rounded-xl border border-border bg-white/[0.03] p-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                  className="w-full resize-none rounded-field border border-border bg-surface p-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                 />
               </div>
               <div className="space-y-1.5 sm:col-span-2">
@@ -198,7 +198,7 @@ export default function ProfilePage() {
                     value={profile.location || ""}
                     onChange={(e) => setProfile({ location: e.target.value })}
                     placeholder="San Francisco, CA"
-                    className="h-10 w-full rounded-xl border border-border bg-white/[0.03] pl-9 pr-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                    className="h-10 w-full rounded-field border border-border bg-surface pl-9 pr-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                   />
                 </div>
               </div>
@@ -213,7 +213,7 @@ export default function ProfilePage() {
               {(profile.skills || []).map((skill) => (
                 <span
                   key={skill}
-                  className="group inline-flex items-center gap-1.5 rounded-lg border border-border bg-white/[0.03] px-2.5 py-1.5 text-xs text-foreground transition-colors hover:bg-white/[0.05]"
+                  className="group inline-flex items-center gap-1.5 rounded-control border border-border bg-surface px-2.5 py-1.5 text-xs text-foreground transition-colors hover:bg-surface-hover"
                 >
                   {skill}
                   <button
@@ -231,12 +231,12 @@ export default function ProfilePage() {
                 onChange={(e) => setNewSkill(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && addSkill()}
                 placeholder="Add a skill (e.g. React)..."
-                className="h-9 flex-1 rounded-xl border border-border bg-white/[0.03] px-3 text-sm outline-none focus:border-primary/50 transition-colors"
+                className="h-9 flex-1 rounded-field border border-border bg-surface px-3 text-sm outline-none focus:border-primary/50 transition-colors"
               />
               <button
                 onClick={addSkill}
                 disabled={!newSkill.trim()}
-                className="flex h-9 items-center gap-1 rounded-xl bg-primary/10 px-4 text-sm font-medium text-primary transition-colors hover:bg-primary/20 disabled:opacity-40 cursor-pointer"
+                className="flex h-9 items-center gap-1 rounded-field bg-primary/10 px-4 text-sm font-medium text-primary transition-colors hover:bg-primary/20 disabled:opacity-40 cursor-pointer"
               >
                 <Plus className="size-4" /> Add
               </button>
@@ -259,7 +259,7 @@ export default function ProfilePage() {
                   value={profile.socials?.github || ""}
                   onChange={(e) => updateSocial("github", e.target.value)}
                   placeholder="https://github.com/..."
-                  className="h-9 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                  className="h-9 w-full rounded-field border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                 />
               </div>
               <div className="space-y-1.5">
@@ -270,7 +270,7 @@ export default function ProfilePage() {
                   value={profile.socials?.twitter || ""}
                   onChange={(e) => updateSocial("twitter", e.target.value)}
                   placeholder="https://twitter.com/..."
-                  className="h-9 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                  className="h-9 w-full rounded-field border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                 />
               </div>
               <div className="space-y-1.5">
@@ -281,7 +281,7 @@ export default function ProfilePage() {
                   value={profile.socials?.linkedin || ""}
                   onChange={(e) => updateSocial("linkedin", e.target.value)}
                   placeholder="https://linkedin.com/in/..."
-                  className="h-9 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                  className="h-9 w-full rounded-field border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                 />
               </div>
               <div className="space-y-1.5">
@@ -292,7 +292,7 @@ export default function ProfilePage() {
                   value={profile.socials?.website || ""}
                   onChange={(e) => updateSocial("website", e.target.value)}
                   placeholder="https://..."
-                  className="h-9 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
+                  className="h-9 w-full rounded-field border border-border bg-surface px-3 text-sm text-foreground outline-none focus:border-primary/50 transition-colors"
                 />
               </div>
             </div>

@@ -5,6 +5,7 @@ import { Target, Rocket, Dumbbell, Wallet, GraduationCap, Heart, Sparkles } from
 import { PageHeader } from "@/components/ui/page-header";
 import { GlassCard } from "@/components/ui/glass-card";
 import { Badge } from "@/components/ui/badge";
+import { ProgressBar } from "@/components/ui/progress-bar";
 
 const GOALS = [
   { title: "Ship 3 production products", cat: "Career", icon: Rocket, color: "#10b981", pct: 66, due: "Dec 2026", term: "Long" },
@@ -23,7 +24,7 @@ export default function GoalsPage() {
   const shortTerm = GOALS.filter((g) => g.term === "Short").length;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader icon={Target} title="Goals" subtitle="Design the life you want." accent="#22c55e" />
 
       <GlassCard className="relative overflow-hidden p-6">
@@ -38,7 +39,7 @@ export default function GoalsPage() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="rounded-full border border-border bg-white/[0.03] px-4 py-2 text-sm text-muted"
+              className="rounded-full border border-border bg-surface px-4 py-2 text-sm text-muted"
             >
               {v}
             </motion.span>
@@ -54,22 +55,20 @@ export default function GoalsPage() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {GOALS.map((g, i) => (
           <motion.div key={g.title} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
-            <GlassCard hover className="p-5">
+            <GlassCard hover className="p-6">
               <div className="flex items-start justify-between">
-                <div className="grid size-10 place-items-center rounded-xl" style={{ background: `${g.color}1f`, color: g.color }}>
+                <div className="grid size-10 place-items-center rounded-field" style={{ background: `${g.color}1f`, color: g.color }}>
                   <g.icon className="size-5" />
                 </div>
                 <Badge color={g.color}>{g.cat}</Badge>
               </div>
               <h3 className="mt-3 text-sm font-semibold leading-snug">{g.title}</h3>
               <div className="mt-4">
-                <div className="mb-1 flex items-center justify-between text-[11px] text-muted-2">
+                <div className="mb-1 flex items-center justify-between text-2xs text-muted-2">
                   <span>Target · {g.due}</span>
                   <span className="tabular">{g.pct}%</span>
                 </div>
-                <div className="h-2 overflow-hidden rounded-full bg-white/[0.06]">
-                  <div className="h-full rounded-full" style={{ width: `${g.pct}%`, background: `linear-gradient(90deg, ${g.color}, ${g.color}99)` }} />
-                </div>
+                <ProgressBar value={g.pct} color={g.color} size="md" label={g.title} />
               </div>
             </GlassCard>
           </motion.div>

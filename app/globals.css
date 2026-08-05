@@ -6,6 +6,11 @@
 /* ============================================================
    Design tokens
    Dark is primary (also the :root fallback to avoid flash).
+
+   Every value here is theme-reactive. Nothing in a component may
+   hardcode `bg-white/[0.03]` or `rgba(255,255,255,…)` for a surface:
+   those render white-on-white in light mode and were the single
+   largest source of broken UI in the previous build.
    ============================================================ */
 :root,
 .dark {
@@ -13,38 +18,56 @@
   --background-2: #0b0b11;
   --foreground: #f7f7fa;
 
-  --card: rgba(21, 21, 26, 0.64);
-  --card-solid: #16161b;
-  --card-hover: rgba(28, 28, 34, 0.78);
-  --elevated: rgba(24, 24, 30, 0.9);
+  /* Content surfaces — solid, so they stay legible and cheap to paint. */
+  --panel: #121217;
+  --panel-2: #16161c;
 
-  --muted: #9b9ba6;
-  --muted-2: #6b6b78;
-  --border: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(255, 255, 255, 0.12);
-  --glass-highlight: rgba(255, 255, 255, 0.07);
+  /* Floating chrome — translucent (sidebar, topbar, overlays). */
+  --glass: rgba(19, 19, 24, 0.72);
+  --glass-strong: rgba(24, 24, 30, 0.86);
+
+  /* Inset surfaces layered *on top of* a panel (rows, inputs, wells). */
+  --surface: rgba(255, 255, 255, 0.032);
+  --surface-hover: rgba(255, 255, 255, 0.058);
+  --surface-strong: rgba(255, 255, 255, 0.085);
+  --track: rgba(255, 255, 255, 0.08);
+
+  --muted: #9d9daa;
+  --muted-2: #71717f;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --glass-highlight: rgba(255, 255, 255, 0.06);
 
   --shadow-color: 245deg 40% 3%;
+  --shadow-opacity: 1;
   --ring: rgba(16, 185, 129, 0.5);
 }
 
 .light {
-  --background: #f4f4f5;
-  --background-2: #ededf0;
+  --background: #fbfbfc;
+  --background-2: #f4f4f6;
   --foreground: #0a0a0b;
 
-  --card: rgba(255, 255, 255, 0.7);
-  --card-solid: #ffffff;
-  --card-hover: rgba(255, 255, 255, 0.9);
-  --elevated: rgba(255, 255, 255, 0.92);
+  --panel: #ffffff;
+  --panel-2: #fafafb;
+
+  --glass: rgba(255, 255, 255, 0.78);
+  --glass-strong: rgba(255, 255, 255, 0.92);
+
+  /* Mirrored in ink, not white — this is the fix for light mode. */
+  --surface: rgba(9, 9, 11, 0.035);
+  --surface-hover: rgba(9, 9, 11, 0.06);
+  --surface-strong: rgba(9, 9, 11, 0.085);
+  --track: rgba(9, 9, 11, 0.09);
 
   --muted: #52525b;
-  --muted-2: #71717a;
-  --border: rgba(9, 9, 11, 0.08);
-  --border-strong: rgba(9, 9, 11, 0.14);
-  --glass-highlight: rgba(255, 255, 255, 0.6);
+  --muted-2: #7b7b85;
+  --border: rgba(9, 9, 11, 0.09);
+  --border-strong: rgba(9, 9, 11, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.7);
 
-  --shadow-color: 240deg 6% 60%;
+  --shadow-color: 240deg 8% 50%;
+  --shadow-opacity: 0.45;
   --ring: rgba(16, 185, 129, 0.5);
 }
 
@@ -53,9 +76,12 @@
   --color-background: var(--background);
   --color-background-2: var(--background-2);
   --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-solid: var(--card-solid);
-  --color-elevated: var(--elevated);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-strong: var(--surface-strong);
+  --color-track: var(--track);
   --color-muted: var(--muted);
   --color-muted-2: var(--muted-2);
   --color-border: var(--border);
@@ -75,6 +101,34 @@
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-display: var(--font-display), ui-serif, Georgia, serif;
 
+  /* ── Type scale ────────────────────────────────────────────────
+     Named steps so components stop reaching for text-[11px]. The two
+     small steps below Tailwind's `xs` were 71 arbitrary values before. */
+  --text-3xs: 0.625rem; /* 10px — dense meta, kbd hints */
+  --text-3xs--line-height: 0.875rem;
+  --text-3xs--letter-spacing: 0.005em;
+  --text-2xs: 0.6875rem; /* 11px — captions, badges, timestamps */
+  --text-2xs--line-height: 1rem;
+
+  /* Display steps for page + hero headings. */
+  --text-display-sm: 1.75rem;
+  --text-display-sm--line-height: 1.15;
+  --text-display-sm--letter-spacing: -0.02em;
+  --text-display-md: 2.125rem;
+  --text-display-md--line-height: 1.1;
+  --text-display-md--letter-spacing: -0.022em;
+  --text-display-lg: 2.75rem;
+  --text-display-lg--line-height: 1.05;
+  --text-display-lg--letter-spacing: -0.025em;
+
+  /* ── Radius scale ──────────────────────────────────────────────
+     Four steps, one job each:
+       control (sm inputs/chips) · field (inputs/buttons) ·
+       tile (inset cards) · panel (top-level cards) */
+  --radius-control: 0.5rem;
+  --radius-field: 0.75rem;
+  --radius-tile: 1rem;
+  --radius-panel: 1.25rem;
   --radius-4xl: 2rem;
 
   /* Animations */
@@ -83,6 +137,9 @@
   --animate-shimmer: shimmer 1.6s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+
+  /* Shared easing — one curve for the whole product. */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @keyframes blob {
@@ -153,6 +210,40 @@ html.light {
   color-scheme: light;
 }
 
+/* ============================================================
+   Appearance settings (Settings → Appearance)
+   Reflected onto <html> by <SettingsEffect/> as data-attributes.
+   Unset = the default look, so the base experience is unchanged.
+   ============================================================ */
+
+/* Font size — root rem scales all text (and rem-based metrics). */
+html[data-font-size="small"] {
+  font-size: 15px;
+}
+html[data-font-size="large"] {
+  font-size: 18px;
+}
+
+/* Layout density — overrides Tailwind v4's spacing token so every spacing
+   utility (padding, gap, space-y, margin) rescales live, independent of
+   font size. */
+html[data-density="compact"] {
+  --spacing: 0.22rem;
+}
+html[data-density="spacious"] {
+  --spacing: 0.285rem;
+}
+
+/* Glass intensity — drives the blur radius consumed by .glass/.glass-strong. */
+html[data-glass="subtle"] {
+  --glass-blur: 8px;
+  --glass-blur-strong: 12px;
+}
+html[data-glass="bold"] {
+  --glass-blur: 34px;
+  --glass-blur-strong: 48px;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -197,7 +288,7 @@ select:focus-visible,
 
 /* Small structural label — used above section/page titles. */
 .eyebrow {
-  font-size: 0.6875rem;
+  font-size: var(--text-2xs);
   line-height: 1;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -206,43 +297,60 @@ select:focus-visible,
 }
 
 /* ============================================================
-   Glassmorphism
+   Elevation
+   Two families:
+     .panel  — solid content cards. Cheap to paint, high legibility.
+     .glass  — translucent floating chrome only (sidebar, topbar,
+               command palette, mobile nav, drawers).
+   Restricting backdrop-filter to chrome removes ~40 composited
+   blur layers that previously sat behind every content card.
    ============================================================ */
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px -1px hsl(var(--shadow-color) / calc(0.5 * var(--shadow-opacity)));
+}
+
+.panel-2 {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+}
+
 .glass {
-  background: var(--card);
-  backdrop-filter: blur(18px) saturate(150%);
-  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  background: var(--glass);
+  backdrop-filter: blur(var(--glass-blur, 20px)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 20px)) saturate(160%);
   border: 1px solid var(--border);
   box-shadow:
     0 1px 0 0 var(--glass-highlight) inset,
-    0 2px 6px -2px hsl(var(--shadow-color) / 0.4),
-    0 12px 28px -14px hsl(var(--shadow-color) / 0.55);
+    0 2px 6px -2px hsl(var(--shadow-color) / calc(0.4 * var(--shadow-opacity))),
+    0 12px 28px -14px hsl(var(--shadow-color) / calc(0.55 * var(--shadow-opacity)));
 }
 
 .glass-strong {
-  background: var(--elevated);
-  backdrop-filter: blur(28px) saturate(170%);
-  -webkit-backdrop-filter: blur(28px) saturate(170%);
+  background: var(--glass-strong);
+  backdrop-filter: blur(var(--glass-blur-strong, 28px)) saturate(170%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-strong, 28px)) saturate(170%);
   border: 1px solid var(--border-strong);
   box-shadow:
     0 1px 0 0 var(--glass-highlight) inset,
-    0 4px 12px -4px hsl(var(--shadow-color) / 0.5),
-    0 24px 60px -20px hsl(var(--shadow-color) / 0.7);
+    0 4px 12px -4px hsl(var(--shadow-color) / calc(0.5 * var(--shadow-opacity))),
+    0 24px 60px -20px hsl(var(--shadow-color) / calc(0.7 * var(--shadow-opacity)));
 }
 
+/* Hover lift — restrained. 1px, not 2, and no shadow bloom. */
 .card-hover {
   transition:
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.4s ease;
+    transform 0.24s var(--ease-out-expo),
+    box-shadow 0.24s var(--ease-out-expo),
+    border-color 0.24s ease;
 }
 .card-hover:hover {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
   border-color: var(--border-strong);
   box-shadow:
-    0 1px 0 0 var(--glass-highlight) inset,
-    0 6px 16px -6px hsl(var(--shadow-color) / 0.5),
-    0 28px 64px -22px hsl(var(--shadow-color) / 0.75);
+    0 2px 4px -2px hsl(var(--shadow-color) / calc(0.5 * var(--shadow-opacity))),
+    0 10px 24px -12px hsl(var(--shadow-color) / calc(0.6 * var(--shadow-opacity)));
 }
 
 /* ============================================================
@@ -295,13 +403,13 @@ select:focus-visible,
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--border) 25%,
-    var(--glass-highlight) 37%,
-    var(--border) 63%
+    var(--surface) 25%,
+    var(--surface-strong) 37%,
+    var(--surface) 63%
   );
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-field);
 }
 
 /* ============================================================
@@ -338,6 +446,18 @@ select:focus-visible,
 .nav-scroll::-webkit-scrollbar-thumb:hover {
   background: var(--muted-2);
   background-clip: content-box;
+}
+
+/* Fades the top/bottom edge of a scroll area so clipped content reads as
+   "there is more" rather than "this is the end". */
+.scroll-fade {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 12px,
+    #000 calc(100% - 12px),
+    transparent 100%
+  );
 }
 
 *::-webkit-scrollbar {

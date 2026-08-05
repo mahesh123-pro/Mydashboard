@@ -29,7 +29,7 @@ export default function JournalPage() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,7 +41,7 @@ export default function JournalPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader icon={BookOpen} title="Journal" subtitle="Reflect, record, grow." accent="#059669" />
 
       <div className="grid gap-4 lg:grid-cols-5">
@@ -57,13 +57,13 @@ export default function JournalPage() {
                   type="button"
                   onClick={() => setMood(m.key)}
                   className={cn(
-                    "grid flex-1 place-items-center gap-1 rounded-xl border py-2.5 transition-colors",
+                    "grid flex-1 place-items-center gap-1 rounded-field border py-2.5 transition-colors",
                     mood === m.key ? "border-transparent" : "border-border text-muted-2 hover:text-foreground",
                   )}
                   style={mood === m.key ? { background: `${m.color}1f`, color: m.color, boxShadow: `inset 0 0 0 1px ${m.color}44` } : undefined}
                 >
                   <m.icon className="size-5" />
-                  <span className="text-[10px]">{m.label}</span>
+                  <span className="text-3xs">{m.label}</span>
                 </button>
               ))}
             </div>
@@ -71,14 +71,14 @@ export default function JournalPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Title"
-              className="h-10 w-full rounded-xl border border-border bg-white/[0.03] px-3 text-sm outline-none focus:border-primary/50"
+              className="h-10 w-full rounded-field border border-border bg-surface px-3 text-sm outline-none focus:border-primary/50"
             />
             <textarea
               value={body}
               onChange={(e) => setBody(e.target.value)}
               placeholder="What's on your mind?"
               rows={5}
-              className="w-full resize-none rounded-xl border border-border bg-white/[0.03] p-3 text-sm outline-none focus:border-primary/50"
+              className="w-full resize-none rounded-field border border-border bg-surface p-3 text-sm outline-none focus:border-primary/50"
             />
             <Button type="submit" className="w-full">
               Save entry
@@ -103,15 +103,15 @@ export default function JournalPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                 >
-                  <GlassCard className="p-5">
+                  <GlassCard className="p-6">
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-2.5">
-                        <div className="grid size-9 place-items-center rounded-xl" style={{ background: `${m.color}1f`, color: m.color }}>
+                        <div className="grid size-9 place-items-center rounded-field" style={{ background: `${m.color}1f`, color: m.color }}>
                           <m.icon className="size-4" />
                         </div>
                         <div>
                           <div className="text-sm font-semibold">{e.title}</div>
-                          <div className="text-[11px] text-muted-2">
+                          <div className="text-2xs text-muted-2">
                             {new Date(e.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
                           </div>
                         </div>

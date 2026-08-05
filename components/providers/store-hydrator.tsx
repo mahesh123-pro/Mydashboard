@@ -37,8 +37,12 @@ export function StoreHydrator() {
           // Only apply keys the server actually has a value for. A partial or
           // freshly-seeded document would otherwise shallow-merge `undefined`
           // over the local arrays/objects and blank out the whole dashboard.
+          // Empty arrays are skipped too — a blank cloud doc must not wipe the
+          // seeded data out from under pages that assume non-empty collections.
           const patch = Object.fromEntries(
-            Object.entries(json.data).filter(([, v]) => v !== undefined && v !== null),
+            Object.entries(json.data).filter(
+              ([, v]) => v !== undefined && v !== null && !(Array.isArray(v) && v.length === 0),
+            ),
           );
           if (Object.keys(patch).length > 0) {
             useStore.setState(patch as Partial<ReturnType<typeof useStore.getState>>);

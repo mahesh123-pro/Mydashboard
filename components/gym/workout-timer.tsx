@@ -22,7 +22,7 @@ export function WorkoutTimer() {
   const ss = String(seconds % 60).padStart(2, "0");
 
   return (
-    <div className="glass flex flex-col items-center rounded-3xl p-6">
+    <div className="panel flex flex-col items-center rounded-panel p-6">
       <div className="flex items-center gap-2 self-start text-sm font-semibold text-muted">
         <Timer className="size-4 text-danger" /> Workout Timer
       </div>
@@ -32,7 +32,7 @@ export function WorkoutTimer() {
       <div className="flex items-center gap-2">
         <button
           onClick={() => setRunning((r) => !r)}
-          className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-br from-primary to-secondary px-5 text-sm font-medium text-white cursor-pointer"
+          className="inline-flex h-11 items-center gap-2 rounded-field bg-gradient-to-br from-primary to-secondary px-5 text-sm font-medium text-white cursor-pointer"
         >
           {running ? <Pause className="size-4" /> : <Play className="size-4" />}
           {running ? "Pause" : "Start"}
@@ -42,7 +42,7 @@ export function WorkoutTimer() {
             setRunning(false);
             setSeconds(0);
           }}
-          className="grid size-11 place-items-center rounded-xl border border-border-strong text-muted transition-colors hover:text-foreground cursor-pointer"
+          className="grid size-11 place-items-center rounded-field border border-border-strong text-muted transition-colors hover:text-foreground cursor-pointer"
         >
           <RotateCcw className="size-4" />
         </button>
@@ -55,7 +55,7 @@ export function WorkoutTimer() {
               setSeconds(s);
               setRunning(true);
             }}
-            className="rounded-lg border border-border bg-white/[0.03] px-2.5 py-1 text-[11px] text-muted-2 transition-colors hover:text-foreground cursor-pointer"
+            className="rounded-control border border-border bg-surface px-2.5 py-1 text-2xs text-muted-2 transition-colors hover:text-foreground cursor-pointer"
           >
             {s}s rest
           </button>

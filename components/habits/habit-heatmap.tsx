@@ -40,12 +40,15 @@ export function HabitHeatmap({
   const columns: (typeof cells)[] = [];
   for (let i = 0; i < cells.length; i += 7) columns.push(cells.slice(i, i + 7));
 
+  // A single-hue emerald ramp. This used to run indigo → violet → green, which
+  // read as three unrelated colours and matched nothing else in the product;
+  // a monotonic ramp also makes intensity actually comparable between cells.
   const colors = [
-    "rgba(255,255,255,0.05)",
-    "rgba(99,102,241,0.35)",
-    "rgba(99,102,241,0.6)",
-    "rgba(139,92,246,0.8)",
-    "#22c55e",
+    "var(--surface-hover)",
+    "rgba(16,185,129,0.28)",
+    "rgba(16,185,129,0.5)",
+    "rgba(16,185,129,0.75)",
+    "#10b981",
   ];
 
   return (
@@ -67,7 +70,7 @@ export function HabitHeatmap({
           </div>
         ))}
       </div>
-      <div className="mt-3 flex items-center justify-between text-[11px] text-muted-2">
+      <div className="mt-3 flex items-center justify-between text-2xs text-muted-2">
         <span>
           {hover
             ? `${new Date(hover.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })} · ${hover.count}/${hover.total} habits`

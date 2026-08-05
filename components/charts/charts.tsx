@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
  * render and loaded client-side only, with a shimmer skeleton while it arrives.
  */
 function Loading({ height = 220 }: { height?: number }) {
-  return <div className="skeleton w-full rounded-xl" style={{ height }} />;
+  return <div className="skeleton w-full rounded-field" style={{ height }} />;
 }
 
 export const AreaTrend = dynamic(() => import("./charts-impl").then((m) => m.AreaTrend), {

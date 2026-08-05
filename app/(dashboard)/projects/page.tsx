@@ -14,6 +14,7 @@ import { StatusBadge, PriorityBadge } from "@/components/ui/badge";
 import { Segmented } from "@/components/ui/segmented";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ProjectDrawer } from "@/components/projects/project-drawer";
+import { ProgressBar } from "@/components/ui/progress-bar";
 
 type Filter = "all" | ProjectStatus;
 
@@ -23,7 +24,7 @@ export default function ProjectsPage() {
   const [filter, setFilter] = useState<Filter>("all");
   const [selected, setSelected] = useState<Project | null>(null);
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
 
   const shown = filter === "all" ? projects : projects.filter((p) => p.status === filter);
   const active = projects.filter((p) => p.status === "active").length;
@@ -35,7 +36,7 @@ export default function ProjectsPage() {
   const selectedLive = selected ? projects.find((p) => p.id === selected.id) ?? null : null;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         icon={FolderKanban}
         title="Projects"
@@ -77,7 +78,7 @@ export default function ProjectsPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
             onClick={() => setSelected(p)}
-            className="glass card-hover group relative overflow-hidden rounded-3xl p-5 text-left"
+            className="panel card-hover group relative overflow-hidden rounded-panel p-6 text-left"
           >
             <div className="absolute inset-x-0 top-0 h-1" style={{ background: p.color }} />
             <div className="flex items-start justify-between gap-2">
@@ -91,20 +92,18 @@ export default function ProjectsPage() {
 
             <div className="mt-3 flex flex-wrap gap-1.5">
               {p.tech.slice(0, 4).map((t) => (
-                <span key={t} className="rounded-md bg-white/[0.04] px-1.5 py-0.5 text-[10px] text-muted-2">
+                <span key={t} className="rounded-control bg-surface-hover px-1.5 py-0.5 text-3xs text-muted-2">
                   {t}
                 </span>
               ))}
             </div>
 
             <div className="mt-4">
-              <div className="mb-1 flex items-center justify-between text-[11px] text-muted-2">
+              <div className="mb-1 flex items-center justify-between text-2xs text-muted-2">
                 <span>{p.tasksDone}/{p.tasksTotal} tasks</span>
                 <span className="tabular">{p.progress}%</span>
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-                <div className="h-full rounded-full" style={{ width: `${p.progress}%`, background: p.color }} />
-              </div>
+              <ProgressBar value={p.progress} color={p.color} gradient={false} label={`${p.name} progress`} />
             </div>
 
             <div className="mt-4 flex items-center justify-between">
@@ -112,7 +111,7 @@ export default function ProjectsPage() {
               <div className="flex items-center gap-2 text-muted-2">
                 {p.repo && <GitBranch className="size-3.5" />}
                 {p.deploy && <ExternalLink className="size-3.5" />}
-                <span className="inline-flex items-center gap-1 text-[11px]">
+                <span className="inline-flex items-center gap-1 text-2xs">
                   <Clock className="size-3" /> {p.timeSpentH}h
                 </span>
               </div>

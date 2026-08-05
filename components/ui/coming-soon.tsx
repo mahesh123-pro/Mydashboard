@@ -13,7 +13,7 @@ export function ComingSoon({
   note?: string;
 }) {
   return (
-    <div className="glass relative mt-6 overflow-hidden rounded-3xl p-8">
+    <div className="panel relative mt-6 overflow-hidden rounded-panel p-8">
       <div
         className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full opacity-20 blur-3xl"
         style={{ background: "radial-gradient(circle, #10b981, transparent 60%)" }}
@@ -22,12 +22,12 @@ export function ComingSoon({
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="grid size-16 place-items-center rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 text-primary"
-          style={{ boxShadow: "inset 0 0 0 1px rgba(99,102,241,0.3)" }}
+          className="grid size-16 place-items-center rounded-tile bg-gradient-to-br from-primary/20 to-secondary/20 text-primary"
+          style={{ boxShadow: "inset 0 0 0 1px rgba(16,185,129,0.3)" }}
         >
           <Icon className="size-8" />
         </motion.div>
-        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-white/[0.03] px-3 py-1 text-[11px] font-medium text-muted">
+        <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1 text-2xs font-medium text-muted">
           <Sparkles className="size-3 text-secondary" /> Coming in v2
         </div>
         <p className="mt-4 max-w-md text-sm leading-relaxed text-muted">{note}</p>
@@ -36,7 +36,7 @@ export function ComingSoon({
           {features.map((f) => (
             <div
               key={f}
-              className="flex items-center gap-2 rounded-xl border border-border bg-white/[0.02] px-3 py-2.5 text-left text-xs text-muted"
+              className="flex items-center gap-2 rounded-field border border-border bg-surface px-3 py-2.5 text-left text-xs text-muted"
             >
               <span className="size-1.5 rounded-full bg-primary" />
               {f}

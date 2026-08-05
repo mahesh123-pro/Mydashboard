@@ -36,7 +36,7 @@ export default function LifePage() {
   const toggleTask = useStore((s) => s.toggleTask);
   const [view, setView] = useState<"timeline" | "kanban">("timeline");
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
 
   const events: Ev[] = [
     ...tasks.filter((t) => t.time).map((t) => ({ id: t.id, time: t.time!, title: t.title, kind: "task" as const, done: t.done, priority: t.priority })),
@@ -50,7 +50,7 @@ export default function LifePage() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         icon={HeartPulse}
         title="My Life"
@@ -81,10 +81,10 @@ export default function LifePage() {
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.03 }}
-                  className="relative flex items-center gap-4 rounded-xl px-2 py-2.5 transition-colors hover:bg-white/[0.03]"
+                  className="relative flex items-center gap-4 rounded-field px-2 py-2.5 transition-colors hover:bg-surface"
                 >
-                  <span className="tabular w-12 shrink-0 text-right text-[11px] text-muted-2">{e.time}</span>
-                  <span className="z-10 grid size-9 shrink-0 place-items-center rounded-xl" style={{ background: `${meta.color}1f`, color: meta.color, boxShadow: `inset 0 0 0 1px ${meta.color}33` }}>
+                  <span className="tabular w-12 shrink-0 text-right text-2xs text-muted-2">{e.time}</span>
+                  <span className="z-10 grid size-9 shrink-0 place-items-center rounded-field" style={{ background: `${meta.color}1f`, color: meta.color, boxShadow: `inset 0 0 0 1px ${meta.color}33` }}>
                     <Icon className="size-4" />
                   </span>
                   <button
@@ -107,25 +107,25 @@ export default function LifePage() {
               return h >= col.range[0] && h < col.range[1];
             });
             return (
-              <GlassCard key={col.label} className="p-5">
+              <GlassCard key={col.label} className="p-6">
                 <div className="mb-3 flex items-center justify-between">
                   <h3 className="text-sm font-semibold">{col.label}</h3>
-                  <span className="text-[11px] text-muted-2">{items.length}</span>
+                  <span className="text-2xs text-muted-2">{items.length}</span>
                 </div>
                 <div className="space-y-2">
                   {items.map((e) => {
                     const meta = KIND_META[e.kind];
                     return (
-                      <div key={e.id} className="rounded-xl border border-border bg-white/[0.02] p-3">
+                      <div key={e.id} className="rounded-field border border-border bg-surface p-3">
                         <div className="flex items-center gap-2">
                           <span className="size-2 rounded-full" style={{ background: meta.color }} />
-                          <span className="tabular text-[11px] text-muted-2">{e.time}</span>
+                          <span className="tabular text-2xs text-muted-2">{e.time}</span>
                         </div>
                         <div className={cn("mt-1 text-sm", e.done && "text-muted-2 line-through")}>{e.title}</div>
                       </div>
                     );
                   })}
-                  {items.length === 0 && <div className="rounded-xl border border-dashed border-border py-6 text-center text-xs text-muted-2">Nothing scheduled</div>}
+                  {items.length === 0 && <div className="rounded-field border border-dashed border-border py-6 text-center text-xs text-muted-2">Nothing scheduled</div>}
                 </div>
               </GlassCard>
             );

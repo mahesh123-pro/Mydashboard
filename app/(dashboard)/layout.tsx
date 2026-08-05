@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="relative min-h-screen">
       <a
         href="#main-content"
-        className="sr-only left-4 top-4 z-[200] rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed"
+        className="sr-only left-4 top-4 z-[200] rounded-field bg-primary px-4 py-2 text-sm font-medium text-white focus:not-sr-only focus:fixed"
       >
         Skip to content
       </a>

@@ -171,7 +171,7 @@ export function CommandPalette() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            className="glass-strong relative w-full max-w-xl overflow-hidden rounded-2xl"
+            className="glass-strong relative w-full max-w-xl overflow-hidden rounded-tile"
           >
             <Command shouldFilter={false} loop className="flex flex-col">
               <div className="flex items-center gap-3 border-b border-border px-4">
@@ -183,7 +183,7 @@ export function CommandPalette() {
                   placeholder="Search or type a command…"
                   className="h-14 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-2"
                 />
-                <kbd className="rounded-md border border-border px-1.5 py-0.5 font-mono text-[10px] text-muted-2">ESC</kbd>
+                <kbd className="rounded-control border border-border px-1.5 py-0.5 font-mono text-3xs text-muted-2">ESC</kbd>
               </div>
 
               <Command.List className="max-h-[52vh] overflow-y-auto p-2">
@@ -296,7 +296,7 @@ function Group({ heading, children }: { heading: string; children: React.ReactNo
   return (
     <Command.Group
       heading={heading}
-      className="mb-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-widest [&_[cmdk-group-heading]]:text-muted-2"
+      className="mb-1 [&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5 [&_[cmdk-group-heading]]:text-3xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-widest [&_[cmdk-group-heading]]:text-muted-2"
     >
       {children}
     </Command.Group>
@@ -320,7 +320,7 @@ function Item({
     <Command.Item
       value={value}
       onSelect={onSelect}
-      className="flex cursor-pointer items-center gap-3 rounded-xl px-2.5 py-2 text-sm text-muted data-[selected=true]:bg-white/[0.07] data-[selected=true]:text-foreground"
+      className="flex cursor-pointer items-center gap-3 rounded-field px-2.5 py-2 text-sm text-muted data-[selected=true]:bg-surface-strong data-[selected=true]:text-foreground"
     >
       <Icon className="size-4 shrink-0 text-muted-2" />
       <span className="flex-1 truncate">{children}</span>

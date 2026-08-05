@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { CalendarClock, ChevronRight } from "lucide-react";
+import { CalendarCheck, CalendarClock, ChevronRight } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { SectionCard } from "@/components/ui/section-card";
+import { ProgressBar } from "@/components/ui/progress-bar";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export function Deadlines() {
   const projects = useStore((s) => s.projects);
@@ -15,42 +18,64 @@ export function Deadlines() {
     .slice(0, 4);
 
   return (
-    <div className="glass flex h-full flex-col rounded-3xl p-6">
-      <div className="flex items-center justify-between">
-        <h3 className="inline-flex items-center gap-2 text-sm font-semibold">
-          <CalendarClock className="size-4 text-danger" /> Upcoming Deadlines
-        </h3>
-        <Link href="/projects" className="text-[11px] text-muted-2 transition-colors hover:text-foreground">
+    <SectionCard
+      fill
+      icon={CalendarClock}
+      iconColor="var(--color-danger)"
+      title="Upcoming Deadlines"
+      description="Soonest first, across active projects"
+      action={
+        <Link
+          href="/projects"
+          className="text-2xs text-muted-2 transition-colors hover:text-foreground"
+        >
           All projects
         </Link>
-      </div>
-      <div className="mt-4 flex-1 space-y-2.5">
+      }
+      bodyClassName="space-y-2"
+    >
+      <>
+        {/* Every other widget had an empty state; this one rendered a blank
+            card once all projects were shipped. */}
+        {upcoming.length === 0 && (
+          <EmptyState
+            icon={CalendarCheck}
+            title="Nothing due"
+            description="No active project has an upcoming deadline."
+            compact
+          />
+        )}
         {upcoming.map((p) => {
           const urgent = p.days <= 7;
           return (
             <Link
               key={p.id}
               href="/projects"
-              className="group flex items-center gap-3 rounded-xl border border-border bg-white/[0.02] p-3 transition-colors hover:border-border-strong"
+              className="group flex items-center gap-3 rounded-field border border-border bg-surface p-3 transition-colors hover:border-border-strong"
             >
               <span className="size-2.5 shrink-0 rounded-full" style={{ background: p.color }} />
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-medium">{p.name}</div>
-                <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
-                  <div className="h-full rounded-full" style={{ width: `${p.progress}%`, background: p.color }} />
-                </div>
+                <ProgressBar
+                  value={p.progress}
+                  color={p.color}
+                  size="xs"
+                  gradient={false}
+                  label={`${p.name} progress`}
+                  className="mt-1.5"
+                />
               </div>
               <div className="text-right">
                 <div className={`tabular text-sm font-semibold ${urgent ? "text-danger" : "text-foreground"}`}>
                   {p.days <= 0 ? "Due" : `${p.days}d`}
                 </div>
-                <div className="text-[10px] text-muted-2">left</div>
+                <div className="text-3xs text-muted-2">left</div>
               </div>
               <ChevronRight className="size-4 text-muted-2 transition-transform group-hover:translate-x-0.5" />
             </Link>
           );
         })}
-      </div>
-    </div>
+      </>
+    </SectionCard>
   );
 }

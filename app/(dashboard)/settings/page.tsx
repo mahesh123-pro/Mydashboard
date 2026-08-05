@@ -64,7 +64,7 @@ function SectionLabel({ icon: Icon, label, color }: { icon: typeof Palette; labe
 
 function SettingRow({ label, description, children }: { label: string; description?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-xl px-1 py-2.5">
+    <div className="flex items-center justify-between gap-4 rounded-field px-1 py-2.5">
       <div className="min-w-0">
         <div className="text-sm text-foreground">{label}</div>
         {description && <div className="mt-0.5 text-xs text-muted-2">{description}</div>}
@@ -82,7 +82,7 @@ function Toggle({ on, onChange }: { on: boolean; onChange: (v: boolean) => void 
       onClick={() => onChange(!on)}
       className={cn(
         "relative h-6 w-11 rounded-full transition-colors duration-200 cursor-pointer",
-        on ? "bg-primary" : "bg-white/[0.1] border border-border",
+        on ? "bg-primary" : "bg-surface-strong border border-border",
       )}
     >
       <span
@@ -105,13 +105,13 @@ function SegmentedControl<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div className="inline-flex rounded-xl border border-border bg-white/[0.03] p-0.5">
+    <div className="inline-flex rounded-field border border-border bg-surface p-0.5">
       {options.map((o) => (
         <button
           key={o.value}
           onClick={() => onChange(o.value)}
           className={cn(
-            "rounded-lg px-3 py-1.5 text-xs font-medium transition-all cursor-pointer",
+            "rounded-control px-3 py-1.5 text-xs font-medium transition-all cursor-pointer",
             value === o.value
               ? "bg-primary/20 text-primary shadow-sm"
               : "text-muted-2 hover:text-foreground",
@@ -138,10 +138,10 @@ function SelectDropdown<T extends string>({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        className="h-9 appearance-none rounded-xl border border-border bg-white/[0.03] pl-3 pr-8 text-sm text-foreground outline-none focus:border-primary/50 cursor-pointer"
+        className="h-9 appearance-none rounded-field border border-border bg-surface pl-3 pr-8 text-sm text-foreground outline-none focus:border-primary/50 cursor-pointer"
       >
         {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-[var(--card-solid)] text-foreground">
+          <option key={o.value} value={o.value} className="bg-[var(--panel)] text-foreground">
             {o.label}
           </option>
         ))}
@@ -160,7 +160,7 @@ function NumberStepper({ value, onChange, min = 0, max = 999, step = 1, unit }: 
   unit?: string;
 }) {
   return (
-    <div className="inline-flex items-center gap-1 rounded-xl border border-border bg-white/[0.03]">
+    <div className="inline-flex items-center gap-1 rounded-field border border-border bg-surface">
       <button
         onClick={() => onChange(Math.max(min, value - step))}
         disabled={value <= min}
@@ -223,11 +223,11 @@ export default function SettingsPage() {
     reader.readAsText(file);
   };
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
   const isDark = theme !== "light";
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader icon={SettingsIcon} title="Settings" subtitle="Make it yours." accent="#71717a" />
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -247,7 +247,7 @@ export default function SettingsPage() {
                     key={t.v}
                     onClick={() => setTheme(t.v)}
                     className={cn(
-                      "flex flex-1 items-center justify-center gap-2 rounded-xl border py-3 text-sm transition-colors cursor-pointer",
+                      "flex flex-1 items-center justify-center gap-2 rounded-field border py-3 text-sm transition-colors cursor-pointer",
                       theme === t.v
                         ? "border-primary/50 bg-primary/10 text-foreground"
                         : "border-border text-muted hover:text-foreground",
@@ -270,7 +270,7 @@ export default function SettingsPage() {
                       toast.success("Accent updated");
                     }}
                     className={cn(
-                      "size-9 rounded-xl transition-transform hover:scale-110 cursor-pointer",
+                      "size-9 rounded-field transition-transform hover:scale-110 cursor-pointer",
                       profile.avatarColor === c && "ring-2 ring-white ring-offset-2 ring-offset-background",
                     )}
                     style={{ background: c }}
@@ -542,13 +542,13 @@ export default function SettingsPage() {
             <SectionLabel icon={Keyboard} label="Keyboard Shortcuts" color="#14b8a6" />
             <div className="mt-3 space-y-1.5">
               {SHORTCUT_GROUPS[0].rows.map((sc) => (
-                <div key={sc.label} className="flex items-center justify-between rounded-xl px-2 py-2 text-sm">
+                <div key={sc.label} className="flex items-center justify-between rounded-field px-2 py-2 text-sm">
                   <span className="text-muted">{sc.label}</span>
                   <span className="flex items-center gap-1">
                     {sc.keys.map((k, i) => (
                       <kbd
                         key={i}
-                        className="grid h-6 min-w-6 place-items-center rounded-md border border-border bg-white/[0.03] px-1.5 font-mono text-[11px] text-muted-2"
+                        className="grid h-6 min-w-6 place-items-center rounded-control border border-border bg-surface px-1.5 font-mono text-2xs text-muted-2"
                       >
                         {k}
                       </kbd>
@@ -559,7 +559,7 @@ export default function SettingsPage() {
             </div>
             <button
               onClick={() => window.dispatchEvent(new Event("open-shortcuts"))}
-              className="mt-2 rounded-lg border border-border px-2 py-1 text-[11px] text-muted-2 transition-colors hover:text-foreground cursor-pointer"
+              className="mt-2 rounded-control border border-border px-2 py-1 text-2xs text-muted-2 transition-colors hover:text-foreground cursor-pointer"
             >
               View all shortcuts · ?
             </button>
@@ -601,7 +601,7 @@ export default function SettingsPage() {
               <RotateCcw className="size-4" /> Reset all data
             </Button>
           </div>
-          <div className="mt-4 rounded-xl border border-border bg-white/[0.02] p-3 text-xs text-muted-2">
+          <div className="mt-4 rounded-field border border-border bg-surface p-3 text-xs text-muted-2">
             v2 roadmap: cloud sync &amp; Google / GitHub login for cross-device access.
           </div>
         </GlassCard>

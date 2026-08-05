@@ -15,7 +15,7 @@ export default function JobsPage() {
   const jobs = useStore((s) => s.jobs);
   const cycleJob = useStore((s) => s.cycleJob);
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
 
   const applied = jobs.filter((j) => j.status !== "saved").length;
   const interviews = jobs.filter((j) => j.status === "interview").length;
@@ -23,7 +23,7 @@ export default function JobsPage() {
   const responseRate = applied ? Math.round(((interviews + offers) / applied) * 100) : 0;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader icon={Briefcase} title="Job Tracker" subtitle="Every opportunity, in one pipeline." accent="#10b981" />
 
       <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
@@ -36,7 +36,7 @@ export default function JobsPage() {
       <GlassCard className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-muted">Applications</h3>
-          <span className="text-[11px] text-muted-2">Tap a status to advance the stage →</span>
+          <span className="text-2xs text-muted-2">Tap a status to advance the stage →</span>
         </div>
         <div className="space-y-2">
           {jobs.map((j, i) => (
@@ -45,9 +45,9 @@ export default function JobsPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.04 }}
-              className="flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-white/[0.02] p-4"
+              className="flex flex-wrap items-center gap-3 rounded-tile border border-border bg-surface p-4"
             >
-              <div className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20 text-sm font-semibold text-primary">
+              <div className="grid size-11 shrink-0 place-items-center rounded-field bg-gradient-to-br from-primary/20 to-secondary/20 text-sm font-semibold text-primary">
                 {j.company.slice(0, 2)}
               </div>
               <div className="min-w-0 flex-1">
@@ -56,7 +56,7 @@ export default function JobsPage() {
                   <span className="text-muted-2">·</span>
                   <span className="text-sm text-muted">{j.company}</span>
                 </div>
-                <div className="mt-0.5 flex flex-wrap items-center gap-3 text-[11px] text-muted-2">
+                <div className="mt-0.5 flex flex-wrap items-center gap-3 text-2xs text-muted-2">
                   <span className="inline-flex items-center gap-1">
                     {j.remote ? <Wifi className="size-3" /> : <MapPin className="size-3" />}
                     {j.location}

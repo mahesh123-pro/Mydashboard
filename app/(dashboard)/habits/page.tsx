@@ -37,13 +37,13 @@ export default function HabitsPage() {
   if (!ready) {
     return (
       <div className="space-y-4">
-        <Skeleton className="h-16 w-64 rounded-2xl" />
+        <Skeleton className="h-16 w-64 rounded-tile" />
         <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-32 rounded-3xl" />
+            <Skeleton key={i} className="h-32 rounded-panel" />
           ))}
         </div>
-        <Skeleton className="h-64 rounded-3xl" />
+        <Skeleton className="h-64 rounded-panel" />
       </div>
     );
   }
@@ -89,7 +89,7 @@ export default function HabitsPage() {
   });
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         icon={ListChecks}
         title="Habit Tracker"
@@ -107,7 +107,7 @@ export default function HabitsPage() {
       <GlassCard className="p-6">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-sm font-semibold text-muted">Today&apos;s Habits</h3>
-          <span className="text-[11px] text-muted-2">Drag the handle to reorder</span>
+          <span className="text-2xs text-muted-2">Drag the handle to reorder</span>
         </div>
         <Reorder.Group
           as="div"
@@ -127,7 +127,7 @@ export default function HabitsPage() {
         <GlassCard className="p-6 lg:col-span-3">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-muted">Consistency</h3>
-            <span className="text-[11px] text-muted-2">Habit completion heatmap</span>
+            <span className="text-2xs text-muted-2">Habit completion heatmap</span>
           </div>
           <HabitHeatmap habitLog={habitLog} habitIds={ids} weeks={18} />
         </GlassCard>
@@ -160,8 +160,8 @@ function HabitTile({
       dragListener={false}
       dragControls={controls}
       className={cn(
-        "group flex items-center gap-3 rounded-2xl border p-3.5 transition-colors",
-        done ? "border-transparent" : "border-border bg-white/[0.02] hover:border-border-strong",
+        "group flex items-center gap-3 rounded-tile border p-3.5 transition-colors",
+        done ? "border-transparent" : "border-border bg-surface hover:border-border-strong",
       )}
       style={done ? { background: `${h.color}1f`, boxShadow: `inset 0 0 0 1px ${h.color}44` } : undefined}
     >
@@ -173,12 +173,12 @@ function HabitTile({
         <GripVertical className="size-4" />
       </button>
       <button onClick={onToggle} className="flex min-w-0 flex-1 items-center gap-3 text-left cursor-pointer">
-        <div className="grid size-10 shrink-0 place-items-center rounded-xl" style={{ background: `${h.color}22`, color: h.color }}>
+        <div className="grid size-10 shrink-0 place-items-center rounded-field" style={{ background: `${h.color}22`, color: h.color }}>
           <Icon className="size-5" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-medium">{h.name}</div>
-          <div className="flex items-center gap-1 text-[11px] text-muted-2">
+          <div className="flex items-center gap-1 text-2xs text-muted-2">
             <Flame className="size-3 text-warning" /> {streak} day streak
           </div>
         </div>

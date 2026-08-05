@@ -28,7 +28,16 @@ export default function GymPage() {
   const prs = useStore((s) => s.prs);
   const addWorkout = useStore((s) => s.addWorkout);
 
-  if (!ready) return <Skeleton className="h-[60vh] rounded-3xl" />;
+  if (!ready) return <Skeleton className="h-[60vh] rounded-panel" />;
+
+  if (!body.length) {
+    return (
+      <div className="space-y-6">
+        <PageHeader icon={Dumbbell} title="Gym" subtitle="Train hard. Track everything." accent="#ef4444" />
+        <GlassCard className="p-10 text-center text-sm text-muted">No body-composition data yet.</GlassCard>
+      </div>
+    );
+  }
 
   const latest = body[body.length - 1];
   const prev = body[body.length - 2] ?? latest;
@@ -63,7 +72,7 @@ export default function GymPage() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <PageHeader
         icon={Dumbbell}
         title="Gym"
@@ -105,7 +114,7 @@ export default function GymPage() {
           </h3>
           <div className="space-y-2">
             {prs.map((pr) => (
-              <div key={pr.exercise} className="flex items-center justify-between rounded-xl border border-border bg-white/[0.02] px-3 py-2.5">
+              <div key={pr.exercise} className="flex items-center justify-between rounded-field border border-border bg-surface px-3 py-2.5">
                 <span className="text-sm">{pr.exercise}</span>
                 <span className="tabular text-sm font-semibold text-warning">{pr.weight} kg</span>
               </div>
@@ -118,24 +127,24 @@ export default function GymPage() {
         <h3 className="mb-4 text-sm font-semibold text-muted">Workout Log</h3>
         <div className="grid gap-3 md:grid-cols-2">
           {workouts.slice(0, 6).map((w) => (
-            <div key={w.id} className="rounded-2xl border border-border bg-white/[0.02] p-4">
+            <div key={w.id} className="rounded-tile border border-border bg-surface p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Badge color={TYPE_COLOR[w.type]}>{w.type}</Badge>
                   <span className="text-sm font-medium">{w.title}</span>
                 </div>
-                <span className="text-[11px] text-muted-2">
+                <span className="text-2xs text-muted-2">
                   {new Date(w.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                 </span>
               </div>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {w.exercises.map((ex) => (
-                  <span key={ex.name} className="rounded-lg bg-white/[0.04] px-2 py-1 text-[11px] text-muted">
+                  <span key={ex.name} className="rounded-control bg-surface-hover px-2 py-1 text-2xs text-muted">
                     {ex.name} · {ex.sets.length}×{ex.sets[0]?.reps ?? "-"}
                   </span>
                 ))}
               </div>
-              <div className="mt-3 flex items-center gap-4 text-[11px] text-muted-2">
+              <div className="mt-3 flex items-center gap-4 text-2xs text-muted-2">
                 <span className="inline-flex items-center gap-1">
                   <Activity className="size-3" /> {w.durationMin} min
                 </span>
